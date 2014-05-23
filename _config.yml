@@ -2,12 +2,12 @@
 #      Main Configs       #
 # ----------------------- #
 
-url: http://yoursite.com
-title: My Octopress Blog
+url: http://vinicius777.github.io
+title: vinicius777 - InfoSec
 subtitle: A blogging framework for hackers.
-author: Your Name
+author: Vinicius Marino
 simple_search: https://www.google.com/search
-description:
+description: 
 
 # Default date format is "ordinal" (resulting in "July 22nd 2007")
 # You can customize the format as defined in
@@ -17,9 +17,9 @@ date_format: "ordinal"
 
 # RSS / Email (optional) subscription links (change if using something like Feedburner)
 subscribe_rss: /atom.xml
-subscribe_email:
+subscribe_email: vinicius777@gmail.com
 # RSS feeds can list your email address if you like
-email:
+email: vinicius777@gmail.com
 
 # ----------------------- #
 #    Jekyll & Plugins     #
@@ -62,14 +62,30 @@ default_asides: [asides/recent_posts.html, asides/github.html, asides/delicious.
 #   3rd Party Settings    #
 # ----------------------- #
 
+# Gravatar
+site.email: vinicius777@gmail.com
+
+social:
+  title: Follow me!
+  adn: # App.net
+  dribbble:
+  facebook: 
+  github: vinicius777
+  googleplus: vinicius777
+  linkedin: pub/vinicius-marino/1b/273/814
+  pinterest: 
+  stackoverflow:
+  twitter: vinicius777_
+  youtube: 
+
 # Github repositories
-github_user:
+github_user: vinicius777
 github_repo_count: 0
 github_show_profile_link: true
 github_skip_forks: true
 
 # Twitter
-twitter_user:
+twitter_user: vinicius777_
 twitter_tweet_button: true
 
 # Google +1
@@ -90,7 +106,7 @@ delicious_user:
 delicious_count: 3
 
 # Disqus Comments
-disqus_short_name:
+disqus_short_name: vinicius777
 disqus_show_comment_count: false
 
 # Google Analytics
