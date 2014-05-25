@@ -4,7 +4,7 @@
   <title><![CDATA[Category: boot2root | vinicius777 - InfoSec]]></title>
   <link href="http://vinicius777.github.io/blog/categories/boot2root/atom.xml" rel="self"/>
   <link href="http://vinicius777.github.io/"/>
-  <updated>2014-05-24T00:07:39+10:00</updated>
+  <updated>2014-05-26T08:46:42+10:00</updated>
   <id>http://vinicius777.github.io/</id>
   <author>
     <name><![CDATA[Vinicius Marino]]></name>
@@ -12,6 +12,17 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[SecOS - Writeup]]></title>
+    <link href="http://vinicius777.github.io/blog/2014/05/23/secos-writeup/"/>
+    <updated>2014-05-23T13:15:41+10:00</updated>
+    <id>http://vinicius777.github.io/blog/2014/05/23/secos-writeup</id>
+    <content type="html"><![CDATA[<p>SecOS is an entry-level boot2root Web basead, created by @PaulWebSec.</p>
+
+<p><h3></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Hades Challenge - Writeup]]></title>
@@ -35,6 +46,11 @@ I&rsquo;ve learned new techniques during the competition and by the same time ha
 
 
 <p><strong> Download the write-up in PDF <a href="http://vinicius777.github.io/download/hades/walkthrough.pdf"> HERE </a></strong></p>
+
+<hr><h3> Updating </h3></hr>
+
+
+
 ]]></content>
   </entry>
   
