@@ -4,7 +4,7 @@
   <title><![CDATA[vinicius777 - InfoSec]]></title>
   <link href="http://vinicius777.github.io/atom.xml" rel="self"/>
   <link href="http://vinicius777.github.io/"/>
-  <updated>2014-05-26T08:46:42+10:00</updated>
+  <updated>2014-05-27T10:06:00+10:00</updated>
   <id>http://vinicius777.github.io/</id>
   <author>
     <name><![CDATA[Vinicius Marino]]></name>
@@ -18,9 +18,18 @@
     <link href="http://vinicius777.github.io/blog/2014/05/23/secos-writeup/"/>
     <updated>2014-05-23T13:15:41+10:00</updated>
     <id>http://vinicius777.github.io/blog/2014/05/23/secos-writeup</id>
-    <content type="html"><![CDATA[<p>SecOS is an entry-level boot2root Web basead, created by @PaulWebSec.</p>
+    <content type="html"><![CDATA[<p>SecOS is an entry-level boot2root Web basead, created by <a href="https://twitter.com/PaulWebSec"> @PaulWebSec</a> hosted at <a href="http://www.vulnhub.com">VulnHub. </a></p>
 
-<p><h3></p>
+<!-- more -->
+
+
+
+
+<h3> Watch the Video </h3>
+
+
+<div class="embed-video-container"><iframe src="http://www.youtube.com/embed/DbOKRPbyZN8" allowfullscreen></iframe></div>
+
 ]]></content>
   </entry>
   
@@ -46,11 +55,6 @@ I&rsquo;ve learned new techniques during the competition and by the same time ha
 
 
 <p><strong> Download the write-up in PDF <a href="http://vinicius777.github.io/download/hades/walkthrough.pdf"> HERE </a></strong></p>
-
-<hr><h3> Updating </h3></hr>
-
-
-
 ]]></content>
   </entry>
   
