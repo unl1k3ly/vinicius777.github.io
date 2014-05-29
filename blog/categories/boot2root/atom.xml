@@ -4,7 +4,7 @@
   <title><![CDATA[Category: boot2root | vinicius777 - InfoSec]]></title>
   <link href="http://vinicius777.github.io/blog/categories/boot2root/atom.xml" rel="self"/>
   <link href="http://vinicius777.github.io/"/>
-  <updated>2014-05-27T10:06:00+10:00</updated>
+  <updated>2014-05-29T11:16:43+10:00</updated>
   <id>http://vinicius777.github.io/</id>
   <author>
     <name><![CDATA[Vinicius Marino]]></name>
@@ -18,7 +18,7 @@
     <link href="http://vinicius777.github.io/blog/2014/05/23/secos-writeup/"/>
     <updated>2014-05-23T13:15:41+10:00</updated>
     <id>http://vinicius777.github.io/blog/2014/05/23/secos-writeup</id>
-    <content type="html"><![CDATA[<p>SecOS is an entry-level boot2root Web basead, created by <a href="https://twitter.com/PaulWebSec"> @PaulWebSec</a> hosted at <a href="http://www.vulnhub.com">VulnHub. </a></p>
+    <content type="html"><![CDATA[<p>SecOS is an entry-level boot2root Web basead, created by <a href="https://twitter.com/PaulWebSec" target="_black"> @PaulWebSec</a> hosted at <a href="http://www.vulnhub.com" target="_black"> VulnHub. </a></p>
 
 <!-- more -->
 
@@ -38,7 +38,7 @@
     <updated>2014-05-23T12:28:05+10:00</updated>
     <id>http://vinicius777.github.io/blog/2014/05/23/hades-challenge-writeup</id>
     <content type="html"><![CDATA[<p>Hades is a boot2root challenge designed by Loki_Sigma. Hades has los of tricks and exploitation techniques are required to see the content of /root/flag.txt.
-Thank you Loki_Sigma and <a href="http://www.twitter.com/vulnhub"> @VulnHub </a> for such a competition.
+Thank you Loki_Sigma and <a href="http://www.twitter.com/vulnhub" target="_black"> @VulnHub </a> for such a competition.
 I&rsquo;ve learned new techniques during the competition and by the same time having lots of fun!</p>
 
 <!-- more -->
@@ -53,7 +53,7 @@ I&rsquo;ve learned new techniques during the competition and by the same time ha
 </center>
 
 
-<p><strong> Download the write-up in PDF <a href="http://vinicius777.github.io/download/hades/walkthrough.pdf"> HERE </a></strong></p>
+<p><strong> Download the write-up in PDF <a href="http://vinicius777.github.io/download/hades/walkthrough.pdf" target="_black"> HERE </a></strong></p>
 ]]></content>
   </entry>
   
