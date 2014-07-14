@@ -9,13 +9,13 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Category: XSS - vinicius777 - InfoSec</title>
+    <title>TrueCrypt - Privilege Escalation - vinicius777 - InfoSec</title>
     <meta name="author" content="Vinicius Marino">
     
-    <meta name="description" content="Category: XSS">
+    <meta name="description" content="TrueCrypt - Privilege Escalation Jul 14th, 2014 Privilege Escalation using truecrypt. Cannot be considerate a vulnerability, but it’s got my &hellip;">
     
     <meta name="viewport" content="width=device-width">
-    <link rel="canonical" href="http://vinicius777.github.ioblog/categories/xss">
+    <link rel="canonical" href="http://vinicius777.github.io/blog/2014/07/14/truecrypt-privilege-escalation">
     
     <link href="/favicon.png" rel="icon">
     <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet">
@@ -60,57 +60,102 @@
         <div class="grid__item two-thirds lap-one-whole palm-one-whole">
         
 
-          
-<h1 class="title indent">
-  Category: XSS
-</h1>
-<hr class="divider">
+          <article class="post">
+  <header>
+  
+  <h1 class="title indent">TrueCrypt - Privilege Escalation</h1>
+  
 
-
-<div id="archive-list">
   
-  
-  
+  <div class="meta clearfix">
     
-    <h2>2014</h2>
+
+
+
+
+
+
+
+
   
-    <article>
-      
 
-<div class="grid">
 
-  <div class="grid__item one-fifth palm-one-whole">
-    <time datetime="2014-06-03T18:29:33+10:00" pubdate>
-      <span class='month'>Jun</span> <span class='day'>03</span>
-    </time>
+<time class="pull-left" datetime="2014-07-14T13:40:51+10:00" pubdate data-updated="true"><i class="icon-calendar"></i> Jul 14<span>th</span>, 2014</time>
+    
+
+    
   </div>
-  <div class="grid__item four-fifths palm-one-whole">
-    <h1 class="gamma"><a href="/blog/2014/06/03/xssing-google-game/">XSSing - Google Game</a></h1>
-    
-    <footer class="meta">
-      
+  
+</header>
 
-  <div class="pull-left">
-    <i class="icon-tags"></i>
-    <ul class="tags unstyled">
-    
-      
-        <li><a class='category' href='/blog/categories/xss/'>XSS</a></li>
-      
-    
-    </ul>
-  </div>
 
-    </footer>
-    
-    <hr class="divider">
-  </div>
 
+
+  <p>Privilege Escalation using truecrypt. Cannot be considerate a vulnerability, but it’s got my attention when I needed to escalation privieges! Happy hacking.</p>
+
+<!-- more -->
+
+<h3> How it began ? </h3>
+
+<p>Back in the chair, working on a privilege escalation over a virtual machine released by <a href="http://vulnhub.com/entry/hell-1,95/" target="_black"> Peleus </a> and at certain stage I found myself stuck on a truecrypt volume.</p>
+
+<p>What to do next? Many ideas came up on my mind but one got my attention and was deftly worth to try out!</p>
+
+<p>NFS, remind you of something? Well, it’s almost the same thing, permission issue. However, It was totally new for me over truecrypt, I have to assume that I didn’t know that truecrypt does not strip suid off files, once the volume is mounted with a low privileges user <strong> (must be part of sudores or truecrypt will not work) </strong> the suid set on the file will work and potentially compromise your server.</p>
+
+<h3> Why it works </h3>
+
+<p>Imagine the case, you are an admin, one of yours developers ask you permission to use truecrypt because part of the project is stored in a external USB flash and that damn flash is encrypted with truecrypt… </p>
+
+<p>If you been in that position, you know that TC (truecrypt) requires administrative password to mount encrypted volume and I’m pretty sure you will not give administrative passwords IF you know how to use sudo, right?</p>
+
+<p>Quickly change sudoers file and set permission for those users to run truecrypt binary with/out password, problem solved! <strong> BUT THIS IS NOT.</strong> The real reason that I’m writing this is because I would do exactly as I mention and I’m guessing most people would do too.</p>
+
+<h3> The Problem </h3>
+
+<p>The big issue is that TC can’t be executed by users without administrative access, it’s strictly for w00t users. Only because it holds whatever permission you’ve set on the file.</p>
+
+<p>For better understanding, here it goes step-by-step.</p>
+
+<p>1-) George is part of sudores file allowed to run truecrypt command to mount his work project. Although, George user does not have any administrative access on the machine, sudo is allowed only to mount his work.</p>
+
+<p>2-) George creates a evil bash file and set permission 4777 (SUID) under user root. This can be done over a VM or whatever has uid 0 just to hold the SUID on the file.</p>
+
+<p>3-) Once the file is created, George update his encrypted flash drive with the evil file and mount where he does not have administrative access.</p>
+
+<p>4-) When the volume is mounted, George checks permission and see the SUID and executes the script… He managed to full escalate privileges.</p>
+
+<p>5-) George laughs!!</p>
+
+<h3> Conclusion </h3>
+
+<p>TrueCrypt needs to run as root only. Or, you’d better get to know your uses! ;-) </p>
+
+<p>As I mention before, It may not be a privilege escalation for you! But was for me and I thought it was worth to share the knowledge about SUID over truecrypt. </p>
+
+<p>Cheers!</p>
+
+<h3> Video POC </h3>
+
+<center><div class="embed-video-container"><iframe src="http://www.youtube.com/embed/TamZOCPZVlk" allowfullscreen=""></iframe></div></center>
+
+<p>If the Automatic Playwer does not work, <a href="https://www.youtube.com/watch?v=TamZOCPZVlk" target="_black"> https://www.youtube.com/watch?v=TamZOCPZVlk </a></p>
+
+<h5> Thanks to </h5>
+
+<p>Thanks you <a href="https://twitter.com/TheColonial" target="_black"> TheColonial </a>
+  and  <a href="https://twitter.com/0x42424242" target="_black"> Peleus </a>, and of course, <a href="http://vulnhub.com/" target="_black"> #VulnHub. </a></p>
+
+
+
+</article>
+
+ 
+<section id="disqus">
+  <h1 class="indent title">Comments</h1>
+  <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 </div>
-    </article>
-  
-</div>
-
+</section>
 
 
         </div>
@@ -218,7 +263,10 @@
   var disqus_shortname = 'vinicius777';
   
     
-    var disqus_script = 'count.js';
+    // var disqus_developer = 1;
+    var disqus_identifier = 'http://vinicius777.github.io/blog/2014/07/14/truecrypt-privilege-escalation/';
+    var disqus_url = 'http://vinicius777.github.io/blog/2014/07/14/truecrypt-privilege-escalation/';
+    var disqus_script = 'embed.js';
   
   (function () {
     var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

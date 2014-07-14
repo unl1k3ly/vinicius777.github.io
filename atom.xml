@@ -4,7 +4,7 @@
   <title><![CDATA[vinicius777 - InfoSec]]></title>
   <link href="http://vinicius777.github.io/atom.xml" rel="self"/>
   <link href="http://vinicius777.github.io/"/>
-  <updated>2014-06-12T13:42:53+10:00</updated>
+  <updated>2014-07-14T16:36:32+10:00</updated>
   <id>http://vinicius777.github.io/</id>
   <author>
     <name><![CDATA[Vinicius Marino]]></name>
@@ -12,6 +12,69 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[TrueCrypt - Privilege Escalation]]></title>
+    <link href="http://vinicius777.github.io/blog/2014/07/14/truecrypt-privilege-escalation/"/>
+    <updated>2014-07-14T13:40:51+10:00</updated>
+    <id>http://vinicius777.github.io/blog/2014/07/14/truecrypt-privilege-escalation</id>
+    <content type="html"><![CDATA[<p>Privilege Escalation using truecrypt. Cannot be considerate a vulnerability, but it’s got my attention when I needed to escalation privieges! Happy hacking.</p>
+
+<!-- more -->
+
+<h3> How it began ? </h3>
+
+<p>Back in the chair, working on a privilege escalation over a virtual machine released by <a href="http://vulnhub.com/entry/hell-1,95/" target="_black"> Peleus </a> and at certain stage I found myself stuck on a truecrypt volume.</p>
+
+<p>What to do next? Many ideas came up on my mind but one got my attention and was deftly worth to try out!</p>
+
+<p>NFS, remind you of something? Well, it’s almost the same thing, permission issue. However, It was totally new for me over truecrypt, I have to assume that I didn’t know that truecrypt does not strip suid off files, once the volume is mounted with a low privileges user <strong> (must be part of sudores or truecrypt will not work) </strong> the suid set on the file will work and potentially compromise your server.</p>
+
+<h3> Why it works </h3>
+
+<p>Imagine the case, you are an admin, one of yours developers ask you permission to use truecrypt because part of the project is stored in a external USB flash and that damn flash is encrypted with truecrypt… </p>
+
+<p>If you been in that position, you know that TC (truecrypt) requires administrative password to mount encrypted volume and I’m pretty sure you will not give administrative passwords IF you know how to use sudo, right?</p>
+
+<p>Quickly change sudoers file and set permission for those users to run truecrypt binary with/out password, problem solved! <strong> BUT THIS IS NOT.</strong> The real reason that I’m writing this is because I would do exactly as I mention and I’m guessing most people would do too.</p>
+
+<h3> The Problem </h3>
+
+<p>The big issue is that TC can’t be executed by users without administrative access, it’s strictly for w00t users. Only because it holds whatever permission you’ve set on the file.</p>
+
+<p>For better understanding, here it goes step-by-step.</p>
+
+<p>1-) George is part of sudores file allowed to run truecrypt command to mount his work project. Although, George user does not have any administrative access on the machine, sudo is allowed only to mount his work.</p>
+
+<p>2-) George creates a evil bash file and set permission 4777 (SUID) under user root. This can be done over a VM or whatever has uid 0 just to hold the SUID on the file.</p>
+
+<p>3-) Once the file is created, George update his encrypted flash drive with the evil file and mount where he does not have administrative access.</p>
+
+<p>4-) When the volume is mounted, George checks permission and see the SUID and executes the script… He managed to full escalate privileges.</p>
+
+<p>5-) George laughs!!</p>
+
+<h3> Conclusion </h3>
+
+<p>TrueCrypt needs to run as root only. Or, you’d better get to know your uses! ;-) </p>
+
+<p>As I mention before, It may not be a privilege escalation for you! But was for me and I thought it was worth to share the knowledge about SUID over truecrypt. </p>
+
+<p>Cheers!</p>
+
+<h3> Video POC </h3>
+
+<center><div class="embed-video-container"><iframe src="http://www.youtube.com/embed/TamZOCPZVlk" allowfullscreen=""></iframe></div></center>
+
+<p>If the Automatic Playwer does not work, <a href="https://www.youtube.com/watch?v=TamZOCPZVlk" target="_black"> https://www.youtube.com/watch?v=TamZOCPZVlk </a></p>
+
+<h5> Thanks to </h5>
+
+<p>Thanks you <a href="https://twitter.com/TheColonial" target="_black"> TheColonial </a>
+  and  <a href="https://twitter.com/0x42424242" target="_black"> Peleus </a>, and of course, <a href="http://vulnhub.com/" target="_black"> #VulnHub. </a></p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[LoBOTomy - Writeup]]></title>
