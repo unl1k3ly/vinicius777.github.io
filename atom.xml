@@ -4,7 +4,7 @@
   <title><![CDATA[vinicius777 - InfoSec]]></title>
   <link href="http://vinicius777.github.io/atom.xml" rel="self"/>
   <link href="http://vinicius777.github.io/"/>
-  <updated>2014-07-14T16:48:27+10:00</updated>
+  <updated>2014-07-14T18:07:12+10:00</updated>
   <id>http://vinicius777.github.io/</id>
   <author>
     <name><![CDATA[Vinicius Marino]]></name>
@@ -18,7 +18,7 @@
     <link href="http://vinicius777.github.io/blog/2014/07/14/truecrypt-privilege-escalation/"/>
     <updated>2014-07-14T13:40:51+10:00</updated>
     <id>http://vinicius777.github.io/blog/2014/07/14/truecrypt-privilege-escalation</id>
-    <content type="html"><![CDATA[<p>Privilege Escalation using truecrypt. Cannot be considerate a vulnerability, but it’s got my attention when I needed to escalation privieges! Happy hacking.</p>
+    <content type="html"><![CDATA[<p>Privilege Escalation using truecrypt. Cannot be considered a vulnerability, but it’s got my attention when I needed to escalate privileges! Happy hacking.</p>
 
 <!-- more -->
 
@@ -66,7 +66,7 @@
 
 <center><div class="embed-video-container"><iframe src="http://www.youtube.com/embed/TamZOCPZVlk" allowfullscreen=""></iframe></div></center>
 
-<p>If the Automatic Playwer does not work, <a href="https://www.youtube.com/watch?v=TamZOCPZVlk" target="_black"> https://www.youtube.com/watch?v=TamZOCPZVlk </a></p>
+<p>If player does not work, <a href="https://www.youtube.com/watch?v=TamZOCPZVlk" target="_black"> https://www.youtube.com/watch?v=TamZOCPZVlk </a></p>
 
 <h5> Thanks to </h5>
 
